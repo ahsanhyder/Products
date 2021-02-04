@@ -20,17 +20,16 @@ export default function product3({ data }) {
 	const [ products, setproducts ] = useState(productData.resbody.sugar_options);
 	const [ offerText, setofferText ] = useState(productData.resbody.variants[0].offers);
 	const [ variant, setvariant ] = useState(productData.resbody.variants);
-	const [ changeTitle, setchangeTitle ] = useState(productData.resbody.variants[0].title);
-	const [ show, setShow ] = useState(false);
+    const [ changeTitle, setchangeTitle ] = useState(productData.resbody.variants[0].title);
+    const [pinchange, setpinchange] = useState("")
+    const [ show, setShow ] = useState(false);
+    const [deliveryData, setDeliveryData] = useState({})
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
 
 	const tnc = offerText.map((ele) => ele.tnc);
 
 	console.log(productData.resbody.variants[0].title);
-	// console.log(productData.resbody.sugar_options[0].title)
-	// console.log(productData.resbody.title)
-	// console.log(productData.resbody.variants[0].images)
 	const handleToggle = () => {
 		setexpand(!expand);
 	};
@@ -59,7 +58,40 @@ export default function product3({ data }) {
 			console.log(offers);
 		}
 		setofferText(offers);
-	};
+    };
+    
+    const handleChange = (e) => {
+        setpinchange(e.target.value);
+
+    }
+
+    const deliveryUpdate = () =>{
+        if(pinchange.length === 0){
+            return
+        }
+       
+var data = JSON.stringify({"pincode": pinchange});
+
+var config = {
+  method: 'post',
+  url: 'https://qa.api.sugarcosmetics.com/pincode/qa/pincodeDateOfDelivery',
+  headers: { 
+    'Content-Type': 'application/json'
+  },
+  data : data
+};
+
+axios(config)
+.then(function (response) {
+    setDeliveryData(response.data)
+  console.log(JSON.stringify(response.data));
+  return response.data
+})
+.catch(function (error) {
+  console.log(error);
+});
+
+    }
 
 	return (
 		<div>
@@ -126,8 +158,8 @@ export default function product3({ data }) {
 										style={{
 											'background-color': `${ele.hexCode}`,
 											height: '55px',
-											width: '55px',
-											borderRadius: '50%'
+                                            width: '55px',
+                                            borderRadius:'50%'
 										}}
 										onClick={() => titleChange(ele.title, ele.images, ele.offers)}
 									/>
@@ -199,12 +231,14 @@ export default function product3({ data }) {
 									border: 'none',
 									borderBottom: '1px solid black',
 									fontSize: 'medium'
-								}}
+                                }}
+                                onChange={handleChange}
 							/>
 						</span>
-						<span class="px-4" style={{ fontWeight: 'bold', color: '#DB7093' }}>
+						<span class="px-4" style={{ fontWeight: 'bold', color: '#DB7093' }} onClick={deliveryUpdate}>
 							CHECK
 						</span>
+                        <h5 class="mt-3">{deliveryData.message}</h5>
 					</div>
 				</div>
 
@@ -282,7 +316,6 @@ export default function product3({ data }) {
 }
 
 export async function getStaticProps() {
-	var axios = require('axios');
 
 	var config = {
 		method: 'get',

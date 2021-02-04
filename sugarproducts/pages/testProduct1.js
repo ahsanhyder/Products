@@ -15,7 +15,10 @@ export default function product1({ data }) {
 	const [ imgData, setimgData ] = useState(productData.resbody.variants[0].images);
 	const [ price, setprice ] = useState(productData.resbody.variants[0].price);
 	const [ compare_at_price, setcompare_at_price ] = useState(productData.resbody.variants[0].compare_at_price);
-	const [ offerText, setofferText ] = useState(productData.resbody.variants[0].offers);
+    const [ offerText, setofferText ] = useState(productData.resbody.variants[0].offers);
+    const [pinchange, setpinchange] = useState("")
+    const [deliveryData, setDeliveryData] = useState({})
+
 
 	const [ show, setShow ] = useState(false);
 
@@ -46,7 +49,40 @@ export default function product1({ data }) {
 		if (rtruncate !== truncated) {
 			setrtruncate(truncated);
 		}
-	};
+    };
+    
+    const handleChange = (e) => {
+        setpinchange(e.target.value);
+
+    }
+
+    const deliveryUpdate = () =>{
+        if(pinchange.length === 0){
+            return
+        }
+       
+var data = JSON.stringify({"pincode": pinchange});
+
+var config = {
+  method: 'post',
+  url: 'https://qa.api.sugarcosmetics.com/pincode/qa/pincodeDateOfDelivery',
+  headers: { 
+    'Content-Type': 'application/json'
+  },
+  data : data
+};
+
+axios(config)
+.then(function (response) {
+    setDeliveryData(response.data)
+  console.log(JSON.stringify(response.data));
+  return response.data
+})
+.catch(function (error) {
+  console.log(error);
+});
+
+    }
 
 	return (
 		<div>
@@ -151,7 +187,7 @@ export default function product1({ data }) {
 					</div>
 					<div class="mx-4 mt-2 mb-2">
 						<span class="">
-							<input
+                        <input
 								class="text-center"
 								type="text"
 								placeholder="Enter Pincode"
@@ -160,12 +196,14 @@ export default function product1({ data }) {
 									border: 'none',
 									borderBottom: '1px solid black',
 									fontSize: 'medium'
-								}}
+                                }}
+                                onChange={handleChange}
 							/>
 						</span>
-						<span class="px-4" style={{ fontWeight: 'bold', color: '#DB7093' }}>
+						<span class="px-4" style={{ fontWeight: 'bold', color: '#DB7093' }} onClick={deliveryUpdate}>
 							CHECK
 						</span>
+                        <h5 class="mt-3">{deliveryData.message}</h5>
 					</div>
 				</div>
 

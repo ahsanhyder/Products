@@ -22,16 +22,14 @@ export default function product3({ data }) {
 	const [ variant, setvariant ] = useState(productData.resbody.variants);
     const [ changeTitle, setchangeTitle ] = useState(productData.resbody.variants[0].title);
     const [pinchange, setpinchange] = useState("")
-	const [ show, setShow ] = useState(false);
+    const [ show, setShow ] = useState(false);
+    const [deliveryData, setDeliveryData] = useState({})
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
 
 	const tnc = offerText.map((ele) => ele.tnc);
 
 	console.log(productData.resbody.variants[0].title);
-	// console.log(productData.resbody.sugar_options[0].title)
-	// console.log(productData.resbody.title)
-	// console.log(productData.resbody.variants[0].images)
 	const handleToggle = () => {
 		setexpand(!expand);
 	};
@@ -68,17 +66,31 @@ export default function product3({ data }) {
     }
 
     const deliveryUpdate = () =>{
-        axios({
-            method: 'post',
-            url: 'https://qa.api.sugarcosmetics.com/pincode/qa/pincodeDateOfDelivery',
-            data: {
-                "pincode": "400076"
-            }
-          }).then((response) => {
-            {console.log(response)}
-          }, (error) => {
-            {console.log(error)}
-          })
+        if(pinchange.length === 0){
+            return
+        }
+       
+var data = JSON.stringify({"pincode": pinchange});
+
+var config = {
+  method: 'post',
+  url: 'https://qa.api.sugarcosmetics.com/pincode/qa/pincodeDateOfDelivery',
+  headers: { 
+    'Content-Type': 'application/json'
+  },
+  data : data
+};
+
+axios(config)
+.then(function (response) {
+    setDeliveryData(response.data)
+  console.log(JSON.stringify(response.data));
+  return response.data
+})
+.catch(function (error) {
+  console.log(error);
+});
+
     }
 
 	return (
@@ -220,14 +232,13 @@ export default function product3({ data }) {
 									borderBottom: '1px solid black',
 									fontSize: 'medium'
                                 }}
-                                value={pinchange}
                                 onChange={handleChange}
 							/>
 						</span>
 						<span class="px-4" style={{ fontWeight: 'bold', color: '#DB7093' }} onClick={deliveryUpdate}>
 							CHECK
 						</span>
-                        <h5 class="mt-3">Hello</h5>
+                        <h5 class="mt-3">{deliveryData.message}</h5>
 					</div>
 				</div>
 
@@ -305,7 +316,6 @@ export default function product3({ data }) {
 }
 
 export async function getStaticProps() {
-	var axios = require('axios');
 
 	var config = {
 		method: 'get',

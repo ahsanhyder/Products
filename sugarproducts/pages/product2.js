@@ -21,6 +21,8 @@ export default function product2({ data }) {
     const [sugarOptionsTitle, setsugarOptionsTitle] = useState(productData.resbody.sugar_options)
     const [ show, setShow ] = useState(false);
     const [active, setactive] = useState(false)
+    const [pinchange, setpinchange] = useState("")
+    const [deliveryData, setDeliveryData] = useState({})
 
 	const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -48,6 +50,39 @@ export default function product2({ data }) {
     const titleChange = (images) =>{
         // alert("hello")
         setimgData(images)
+    }
+
+    const handleChange = (e) => {
+        setpinchange(e.target.value);
+
+    }
+
+    const deliveryUpdate = () =>{
+        if(pinchange.length === 0){
+            return
+        }
+       
+var data = JSON.stringify({"pincode": pinchange});
+
+var config = {
+  method: 'post',
+  url: 'https://qa.api.sugarcosmetics.com/pincode/qa/pincodeDateOfDelivery',
+  headers: { 
+    'Content-Type': 'application/json'
+  },
+  data : data
+};
+
+axios(config)
+.then(function (response) {
+    setDeliveryData(response.data)
+  console.log(JSON.stringify(response.data));
+  return response.data
+})
+.catch(function (error) {
+  console.log(error);
+});
+
     }
 
 	return (
@@ -122,23 +157,24 @@ export default function product2({ data }) {
 								</div>
 								<div class="d-flex nowrap">
 									{ele.products.map((elem) => (
-										<div class="rounded-circle" style={{
-                                            height: '60px',
-                                            width: '60px',
-                                            margin: '4px',
-                                            border: '1px solid black'
-                                        }}>
+										// <div class="rounded-circle" style={{
+                                        //     height: '60px',
+                                        //     width: '60px',
+                                        //     margin: '4px',
+                                        //     border: '1px solid black'
+                                        // }}>
 											<div
-												class="rounded-circle"
+												class=""
 												style={{
 													'background-color': `${elem.hexCode}`,
-													height: '40px',
-													width: '40px',
-													margin: '9px'
+													height: '55px',
+													width: '55px',
+                                                    margin: '9px',
+                                                    borderRadius:"50%"
                                                 }}
                                                 onClick={()=>titleChange(elem.images,)}
 											/>
-										</div>
+										// </div>
 									))}
 								</div>
 							</div>
@@ -199,7 +235,7 @@ export default function product2({ data }) {
 					</div>
 					<div class="mx-4 mt-2 mb-2">
 						<span class="">
-							<input
+                        <input
 								class="text-center"
 								type="text"
 								placeholder="Enter Pincode"
@@ -208,12 +244,14 @@ export default function product2({ data }) {
 									border: 'none',
 									borderBottom: '1px solid black',
 									fontSize: 'medium'
-								}}
+                                }}
+                                onChange={handleChange}
 							/>
 						</span>
-						<span class="px-4" style={{ fontWeight: 'bold', color: '#DB7093' }}>
+						<span class="px-4" style={{ fontWeight: 'bold', color: '#DB7093' }} onClick={deliveryUpdate}>
 							CHECK
 						</span>
+                        <h5 class="mt-3">{deliveryData.message}</h5>
 					</div>
 				</div>
 
