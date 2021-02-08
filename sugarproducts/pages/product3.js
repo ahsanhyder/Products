@@ -5,6 +5,7 @@ import styles from '../styles/Products.module.css';
 import { Button, Modal } from 'react-bootstrap';
 import Carousel from 'react-bootstrap/Carousel';
 import Truncate from 'react-truncate';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 export default function product3({ data }) {
 	const [ expand, setexpand ] = useState(false);
@@ -12,24 +13,24 @@ export default function product3({ data }) {
 	const [ truncate, settruncate ] = useState(false);
 	const [ rtruncate, setrtruncate ] = useState(false);
 	const [ productData, setProductData ] = useState(data);
-	const [ imgData, setimgData ] = useState(productData.resbody.variants[0].images);
-	const [ price, setprice ] = useState(productData.resbody.variants[0].price);
-	const [ stitle, setstitle ] = useState(productData.resbody.variants[0].title);
+	const [ imgData, setimgData ] = useState(productData && productData.resbody.variants[0].images);
+	const [ price, setprice ] = useState(productData && productData.resbody.variants[0].price);
+	const [ stitle, setstitle ] = useState(productData && productData.resbody.variants[0].title);
 	const [ readMore, setReadMore ] = useState(false);
-	const [ compare_at_price, setcompare_at_price ] = useState(productData.resbody.variants[0].compare_at_price);
-	const [ products, setproducts ] = useState(productData.resbody.sugar_options);
-	const [ offerText, setofferText ] = useState(productData.resbody.variants[0].offers);
-	const [ variant, setvariant ] = useState(productData.resbody.variants);
-	const [ changeTitle, setchangeTitle ] = useState(productData.resbody.variants[0].title);
+	const [ compare_at_price, setcompare_at_price ] = useState(productData && productData.resbody.variants[0].compare_at_price);
+	const [ products, setproducts ] = useState(productData && productData.resbody.sugar_options);
+	const [ offerText, setofferText ] = useState(productData && productData.resbody.variants[0].offers);
+	const [ variant, setvariant ] = useState(productData && productData.resbody.variants);
+	const [ changeTitle, setchangeTitle ] = useState(productData && productData.resbody.variants[0].title);
 	const [ pinchange, setpinchange ] = useState('');
 	const [ show, setShow ] = useState(false);
 	const [ deliveryData, setDeliveryData ] = useState({});
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
 
-	const tnc = offerText.map((ele) => ele.tnc);
+	// const tnc = offerText.map((ele) => ele.tnc);
 
-	console.log(productData.resbody.variants[0].title);
+	// console.log(productData.resbody.variants[0].title);
 	const handleToggle = () => {
 		setexpand(!expand);
 	};
@@ -64,7 +65,7 @@ export default function product3({ data }) {
 		setpinchange(e.target.value);
 	};
 	{
-		console.log(productData.resbody.variants[0].inventory_quantity);
+		// console.log(productData.resbody.variants[0].inventory_quantity);
 	}
 	const deliveryUpdate = () => {
 		if (pinchange.length === 0) {
@@ -94,6 +95,31 @@ export default function product3({ data }) {
 			});
 	};
 
+const handleCart = () =>{
+var data = '{\r\n    "is_gwp": 0,\r\n    "product_id": 2350278148179,\r\n    "product_options_kit": [\r\n        {\r\n            "image_url": "https://cdn.shopify.com/s/files/1/0906/2558/products/sugar-cosmetics-smudge-me-not-liquid-mini-lipstick-03-tan-fan-mauve-nude-12001852555347.jpg?v=1577158883",\r\n            "product_id": 4160422019155,\r\n            "product_title": "Your mini liquid lipstick #1",\r\n            "title": "03 Tan Fan (Mauve Nude)",\r\n            "variant_id": 30263398334547\r\n        },\r\n        {\r\n            "image_url": "https://cdn.shopify.com/s/files/1/0906/2558/products/sugar-cosmetics-smudge-me-not-liquid-mini-lipstick-04-plum-yum-muted-plum-12001853571155.jpg?v=1577172935",\r\n            "product_id": 4160427786323,\r\n            "product_title": "Your mini liquid lipstick #2",\r\n            "title": "04 Plum Yum (Muted Plum)",\r\n            "variant_id": 30263405445203\r\n        },\r\n        {\r\n            "image_url": "https://cdn.shopify.com/s/files/1/0906/2558/products/sugar-cosmetics-smudge-me-not-liquid-mini-lipstick-05-rust-lust-red-terracotta-12001853964371.jpg?v=1577172921",\r\n            "product_id": 4160432570451,\r\n            "product_title": "Your mini liquid lipstick #3",\r\n            "title": "05 Rust Lust (Red Terracotta)",\r\n            "variant_id": 30263413145683\r\n        },\r\n        {\r\n            "image_url": "https://cdn.shopify.com/s/files/1/0906/2558/products/sugar-cosmetics-smudge-me-not-liquid-mini-lipstick-06-tangerine-queen-orange-coral-12001859043411.jpg?v=1577172833",\r\n            "product_id": 4160436404307,\r\n            "product_title": "Your mini liquid lipstick #4",\r\n            "title": "06 Tangerine Queen (Orange Coral)",\r\n            "variant_id": 30263418650707\r\n        },\r\n        {\r\n            "product_id": 4500284407891,\r\n            "product_title": "Your Coffret box #1",\r\n            "title": "Black Mini Box",\r\n            "variant_id": 31983959933011\r\n        }\r\n    ],\r\n    "quantity": 1,\r\n    "sugar_product_type": 2,\r\n    "variant_id": 21206334177363,\r\n    "customer_id": 2168277991507\r\n}';
+
+var config = {
+  method: 'post',
+  url: 'https://qa.api.sugarcosmetics.com/cart/qa/addItemToCartV2',
+  headers: { 
+    'Content-Type': ' application/json', 
+    'Authorization': ' XT4ROmmNaPpgEsmmGzcPfvc69YK3RPSP', 
+    'os_type': ' 1', 
+    'version': ' 51'
+  },
+  data : data
+};
+
+axios(config)
+.then(function (response) {
+  console.log(JSON.stringify(response.data));
+})
+.catch(function (error) {
+  console.log(error);
+});
+
+}
+
 	return (
 		<div>
 			<div>
@@ -109,7 +135,7 @@ export default function product3({ data }) {
 							<div class="col-1 col-sm-3 col-md-4  col-lg-5" />
 							<div class="col-10 col-sm-7 col-md-4 col-lg-2">
 								<Carousel>
-									{imgData.map((ele) => (
+									{imgData && imgData.map((ele) => (
 										<Carousel.Item>
 											<img className="d-block w-100" src={ele} alt="First slide" />
 										</Carousel.Item>
@@ -123,7 +149,7 @@ export default function product3({ data }) {
 					<div class="container-fluid">
 						<div class="row">
 							<div class="col text-center">
-								<p className={styles.productTitle}>{productData.resbody.title}</p>
+								<p className={styles.productTitle}>{productData && productData.resbody.title}</p>
 							</div>
 						</div>
 						<div class="row">
@@ -152,7 +178,7 @@ export default function product3({ data }) {
 				</div>
 				<div style={{ marginTop: '154%' }}>
 					<div className={styles.wrapper3}>
-						{variant.map((ele) => {
+						{variant && variant.map((ele) => {
 							return (
 								<div class="container-fluid">
 									<div className={`row`}>
@@ -221,7 +247,7 @@ export default function product3({ data }) {
 								}
 								onTruncate={handletruncate}
 							>
-								{offerText.map((ele) => (
+								{offerText && offerText.map((ele) => (
 									<div>
 										{ele.productOfferText}
 										<br />
@@ -248,6 +274,13 @@ export default function product3({ data }) {
 								</span>
 							)}
 						</div>
+					</div>
+
+                    <div className={`container-fluid mx-5 my-3 fixed-bottom ${styles.cartDiv}`}>
+						<div className={styles.likeIcon}>
+							<FavoriteBorderIcon style={{ fontSize: 45 }} />
+						</div>
+						<div className={styles.cartButton} onClick={handleCart}>ADD TO CART</div>
 					</div>
 
 					<div class="container-fluid mx-1 mt-4 mb-4">
@@ -326,7 +359,7 @@ export default function product3({ data }) {
 							}
 							onTruncate={handlertruncate}
 						>
-							<div dangerouslySetInnerHTML={{ __html: [ productData.resbody.body_html ] }} />
+							<div dangerouslySetInnerHTML={{ __html: [productData && productData.resbody.body_html ] }} />
 						</Truncate>
 						{!rtruncate &&
 						rmore && (
@@ -336,7 +369,7 @@ export default function product3({ data }) {
 						)}
 					</div>
 				</div>
-				{productData.resbody.youtube_id && (
+				{productData && productData.resbody.youtube_id && (
 					<div class="container mt-3">
 						<div class="">
 							<iframe

@@ -7,19 +7,19 @@ import axios from 'axios';
 import Truncate from 'react-truncate';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
-export default function product2({ data }) {
+export default function Product2({ data }) {
 	const [ expand, setexpand ] = useState(false);
 	const [ rmore, setrmore ] = useState(false);
 	const [ truncate, settruncate ] = useState(false);
 	const [ rtruncate, setrtruncate ] = useState(false);
 	const [ productData, setProductData ] = useState(data);
-	const [ imgData, setimgData ] = useState(productData.resbody.variants[0].images);
-	const [ price, setprice ] = useState(productData.resbody.variants[0].price);
-	const [ compare_at_price, setcompare_at_price ] = useState(productData.resbody.variants[0].compare_at_price);
-	const [ offerText, setofferText ] = useState(productData.resbody.variants[0].offers);
-	const [ products, setproducts ] = useState(productData.resbody.sugar_options);
-	const [ productTitle, setproductTitle ] = useState(productData.resbody.sugar_options[0].products.title);
-	const [ sugarOptionsTitle, setsugarOptionsTitle ] = useState(productData.resbody.sugar_options);
+	const [ imgData, setimgData ] = useState(productData && productData.resbody.variants[0].images);
+	const [ price, setprice ] = useState(productData && productData.resbody.variants[0].price);
+	const [ compare_at_price, setcompare_at_price ] = useState(productData && productData.resbody.variants[0].compare_at_price);
+	const [ offerText, setofferText ] = useState(productData && productData.resbody.variants[0].offers);
+	const [ products, setproducts ] = useState(productData && productData.resbody.sugar_options);
+	const [ productTitle, setproductTitle ] = useState(productData && productData.resbody.sugar_options[0].products.title);
+	const [ sugarOptionsTitle, setsugarOptionsTitle ] = useState(productData && productData.resbody.sugar_options);
 	const [ show, setShow ] = useState(false);
 	const [ active, setactive ] = useState(false);
 	const [ pinchange, setpinchange ] = useState('');
@@ -55,7 +55,31 @@ export default function product2({ data }) {
 
 	const handleChange = (e) => {
 		setpinchange(e.target.value);
-	};
+    };
+    
+    const handleCart = () =>{
+var data = '{\r\n    "is_gwp": 0,\r\n    "product_id": 9448894348,\r\n    "quantity": 1,\r\n    "sugar_product_type": 1,\r\n    "variant_id": 12102682837060,\r\n    "customer_id": 2168277991507\r\n}';
+
+var config = {
+  method: 'post',
+  url: 'https://qa.api.sugarcosmetics.com/cart/qa/addItemToCartV2',
+  headers: { 
+    'Authorization': ' XT4ROmmNaPpgEsmmGzcPfvc69YK3RPSP', 
+    'Content-Type': ' application/json', 
+    'version': ' 51'
+  },
+  data : data
+};
+
+axios(config)
+.then(function (response) {
+  console.log(JSON.stringify(response.data));
+})
+.catch(function (error) {
+  console.log(error);
+});
+
+    }
 
 	const deliveryUpdate = () => {
 		if (pinchange.length === 0) {
@@ -99,7 +123,7 @@ export default function product2({ data }) {
 							<div class="col-1 col-sm-3 col-md-4 col-lg-5 " />
 							<div class="col-10 col-sm-7 col-md-4 col-lg-2">
 								<Carousel>
-									{imgData.map((ele) => (
+									{imgData && imgData.map((ele) => (
 										<Carousel.Item>
 											<img className="d-block w-100" src={ele} alt="First slide" />
 										</Carousel.Item>
@@ -113,7 +137,7 @@ export default function product2({ data }) {
 					<div class="container-fluid">
 						<div class="row">
 							<div class="col text-center">
-								<p className={styles.productTitle}>{productData.resbody.title}</p>
+								<p className={styles.productTitle}>{productData && productData.resbody.title}</p>
 							</div>
 						</div>
 						<div class="row">
@@ -137,7 +161,7 @@ export default function product2({ data }) {
 				</div>
 				<div style={{ marginTop: '140%' }}>
 					<div class="container-fluid mx-2 mb-4 mt-4">
-						{products.map((ele) => {
+						{products && products.map((ele) => {
 							return (
 								<div>
 									<div class="d-flex">
@@ -200,7 +224,7 @@ export default function product2({ data }) {
 								}
 								onTruncate={handletruncate}
 							>
-								{offerText.map((ele) => (
+								{offerText && offerText.map((ele) => (
 									<div>
 										{ele.productOfferText}
 										<br />
@@ -228,11 +252,11 @@ export default function product2({ data }) {
 							)}
 						</div>
 					</div>
-					<div className={`container-fluid mx-5 ${styles.cartDiv}`}>
+					<div className={`container-fluid mx-5 my-3 fixed-bottom ${styles.cartDiv}`}>
 						<div className={styles.likeIcon}>
 							<FavoriteBorderIcon style={{ fontSize: 45 }} />
 						</div>
-						<div className={styles.cartButton}>ADD TO CART</div>
+						<div className={styles.cartButton} onClick={handleCart}>ADD TO CART</div>
 					</div>
 
 					<div class="container-fluid mx-1 mt-4 mb-4">
@@ -266,16 +290,9 @@ export default function product2({ data }) {
 							<h5 class="mt-3">{deliveryData.message}</h5>
 						</div>
 					</div>
-
-					{/* <div className={`container-fluid mx-5 ${styles.cartDiv}`}>
-					<div className={styles.likeIcon}>
-						<FavoriteBorderIcon style={{ fontSize: 45 }} />
-					</div>
-					<div className={styles.cartButton}>
-						ADD TO CART
-					</div>
-				</div> */}
-					<div>hgsxjajvjxhjhj</div>
+                    <div>
+                    <button type="button" class="btn btn-primary" onClick={handleCart}>Primary</button>
+                    </div>
 
 					<div
 						className="container-fluid  px-2 mt-4 mb-4"
@@ -321,7 +338,7 @@ export default function product2({ data }) {
 							}
 							onTruncate={handlertruncate}
 						>
-							<div dangerouslySetInnerHTML={{ __html: [ productData.resbody.body_html ] }} />
+							<div dangerouslySetInnerHTML={{ __html: [productData && productData.resbody.body_html ] }} />
 						</Truncate>
 						{!rtruncate &&
 						rmore && (
@@ -331,7 +348,7 @@ export default function product2({ data }) {
 						)}
 					</div>
 				</div>
-				{productData.resbody.youtube_id && (
+				{productData && productData.resbody.youtube_id && (
 					<div class="container mt-3">
 						<div class="">
 							<iframe

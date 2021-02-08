@@ -5,20 +5,21 @@ import { Button, Modal, Form } from 'react-bootstrap';
 import Carousel from 'react-bootstrap/Carousel';
 import axios from 'axios';
 import Truncate from 'react-truncate';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
-export default function product4({ data }) {
+export default function Product4({ data }) {
 	const [ expand, setexpand ] = useState(false);
 	const [ rmore, setrmore ] = useState(false);
 	const [ truncate, settruncate ] = useState(false);
 	const [ rtruncate, setrtruncate ] = useState(false);
 	const [ productData, setProductData ] = useState(data);
-	const [ imgData, setimgData ] = useState(productData.resbody.variants[0].images);
-	const [ price, setprice ] = useState(productData.resbody.variants[0].price);
-	const [ compare_at_price, setcompare_at_price ] = useState(productData.resbody.variants[0].compare_at_price);
-	const [ offerText, setofferText ] = useState(productData.resbody.variants[0].offers);
-	const [ selectPrice, setselectPrice ] = useState(productData.resbody.variants);
+	const [ imgData, setimgData ] = useState(productData && productData.resbody.variants[0].images);
+	const [ price, setprice ] = useState(productData && productData.resbody.variants[0].price);
+	const [ compare_at_price, setcompare_at_price ] = useState(productData && productData.resbody.variants[0].compare_at_price);
+	const [ offerText, setofferText ] = useState(productData && productData.resbody.variants[0].offers);
+	const [ selectPrice, setselectPrice ] = useState(productData && productData.resbody.variants);
 	// {console.log(selectPrice[1].title)}
-	const [ changeTitle, setchangeTitle ] = useState(productData.resbody.variants[0].title);
+	const [ changeTitle, setchangeTitle ] = useState(productData && productData.resbody.variants[0].title);
 	const [ pinchange, setpinchange ] = useState('');
 	const [ deliveryData, setDeliveryData ] = useState({});
 
@@ -87,7 +88,32 @@ export default function product4({ data }) {
 			.catch(function(error) {
 				console.log(error);
 			});
-	};
+    };
+    
+const handleCart = () => {
+var data = '{\r\n  "product_id": 0,\r\n  "variant_id": 0,\r\n  "quantity": 1,\r\n  "sugar_product_type": 3,\r\n  "product_options_giftcard": {\r\n    "name": "person who will recieve",\r\n    "email": "person who will recieve"\r\n  },\r\n  "is_gwp": 0\r\n}';
+
+var config = {
+  method: 'post',
+  url: 'https://qa.api.sugarcosmetics.com/cart/qa/addItemToCartV2',
+  headers: { 
+    'Content-Type': ' application/json', 
+    'Authorization': ' XT4ROmmNaPpgEsmmGzcPfvc69YK3RPSP', 
+    'os_type': ' 1', 
+    'version': ' 51'
+  },
+  data : data
+};
+
+axios(config)
+.then(function (response) {
+  console.log(JSON.stringify(response.data));
+})
+.catch(function (error) {
+  console.log(error);
+});
+
+}
 
 	return (
 		<div>
@@ -104,7 +130,7 @@ export default function product4({ data }) {
 							<div class="col-1 col-sm-3 col-md-4  " />
 							<div class="col-10 col-sm-7 col-md-4 col-lg-4">
 								<Carousel>
-									{imgData.map((ele) => (
+									{imgData && imgData.map((ele) => (
 										<Carousel.Item>
 											<img className="d-block w-100" src={ele} alt="First slide" />
 										</Carousel.Item>
@@ -152,7 +178,7 @@ export default function product4({ data }) {
 					<div class="container-fluid">
 						<div class="row">
 							<div class="col text-center">
-								<p className={styles.productTitle}>{productData.resbody.title}</p>
+								<p className={styles.productTitle}>{productData && productData.resbody.title}</p>
 							</div>
 						</div>
 						<div class="row">
@@ -241,6 +267,13 @@ export default function product4({ data }) {
 								</span>
 							)}
 						</div>
+					</div>
+
+                    <div className={`container-fluid mx-5 my-3 fixed-bottom ${styles.cartDiv}`}>
+						<div className={styles.likeIcon}>
+							<FavoriteBorderIcon style={{ fontSize: 45 }} />
+						</div>
+						<div className={styles.cartButton} onClick={handleCart}>ADD TO CART</div>
 					</div>
 
 					<div class="container-fluid mx-1 mt-4 mb-4">
@@ -334,26 +367,26 @@ export default function product4({ data }) {
 	);
 }
 
-export async function getStaticProps() {
-	var axios = require('axios');
+// export async function getStaticProps() {
+// 	var axios = require('axios');
 
-	var config = {
-		method: 'get',
-		url: 'https://qa.api.sugarcosmetics.com/products/qa/getProductsv2?handle=sugar-gift-card',
-		headers: {}
-	};
+// 	var config = {
+// 		method: 'get',
+// 		url: 'https://qa.api.sugarcosmetics.com/products/qa/getProductsv2?handle=sugar-gift-card',
+// 		headers: {}
+// 	};
 
-	let data = await axios(config)
-		.then(function(response) {
-			return response.data;
-		})
-		.catch(function(error) {
-			console.log(error);
-		});
+// 	let data = await axios(config)
+// 		.then(function(response) {
+// 			return response.data;
+// 		})
+// 		.catch(function(error) {
+// 			console.log(error);
+// 		});
 
-	return {
-		props: {
-			data
-		}
-	};
-}
+// 	return {
+// 		props: {
+// 			data
+// 		}
+// 	};
+// }
