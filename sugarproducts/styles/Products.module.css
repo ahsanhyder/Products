@@ -80,10 +80,13 @@
   }
   
   .wrapper{
-      max-height: 120px;
-      display: flex;
-      overflow-x: auto;
-    }
+    max-height: 120px;
+    display: flex;
+    overflow-x: auto;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-left: 15px;
+  }
 
     .wrapper::-webkit-scrollbar{
         width: 0;
@@ -92,7 +95,7 @@
   .wrapper .item{
       min-width:60px;
       height: 110px;
-      line-height: 110px;
+      line-height: 30px;
       text-align: center;
       background-color: #ddd;
   }
@@ -113,14 +116,80 @@
 
   .wrapper3::-webkit-scrollbar{
       width: 0;
+      height: 0;
   } 
 
 .wrapper3 .item3{
     min-width:60px;
     height: 110px;
-    line-height: 110px;
+    line-height: 30px;
     text-align: center;
     background-color: #ddd;
 }
+
+
+
+.mainwrapper{
+    max-height: 120px;
+    overflow-y: auto;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-left: 15px;
+  }
+
+  .mainitem{
+      margin-right: 40px;
+  }
+
+  .mainwrapper::-webkit-scrollbar{
+      width: 0;
+      height: 0;
+  } 
+
+.mainwrapper .mainitem{
+    min-width:60px;
+    height: 110px;
+    line-height: 30px;
+    text-align: center;
+    background-color: #ddd;
+}
+.cartButton{
+    height: 48px;
+    width: 180px;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background-color: black;
+    font-size: medium;
+    font-weight: 600;
+}
+
+.likeIcon{
+    height: 48px;
+    width: 80px;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 2px;
+    background-color: white;
+}
+.cartDiv{
+    display: flex;
+    position: fixed;
+
+}
+
+.activeCircle{
+  height: '65px';
+  width: '65px';
+	margin: '4px';
+  border-radius:'50%';
+	border: '2px solid black'
+}
+
+  
 
   

@@ -54,9 +54,9 @@ export default function product3({ data }) {
 		// alert("hello")
 		setchangeTitle(title);
 		setimgData(images);
-		{
-			console.log(offers);
-		}
+		// {
+		// 	console.log((productData.resbody.variants[0].inventory_quantity);
+		// }
 		setofferText(offers);
     };
     
@@ -64,10 +64,12 @@ export default function product3({ data }) {
         setpinchange(e.target.value);
 
     }
-
+{   console.log(productData.resbody.variants[0].inventory_quantity)
+}
     const deliveryUpdate = () =>{
         if(pinchange.length === 0){
-            return
+            // console.log("hello")
+            return 
         }
        
 var data = JSON.stringify({"pincode": pinchange});
@@ -102,10 +104,12 @@ axios(config)
 				</Head>
 			</div>
 			<div style={{ overflowX: 'hidden' }}>
+            <div className="fixed-top" style={{ backgroundColor: 'white' }}>
+
 				<div class={`container-fluid mt-3 mb-3 ${styles.sticky}`}>
 					<div class="row">
-						<div class="col-1 col-sm-3 col-md-4  " />
-						<div class="col-10 col-sm-7 col-md-4 col-lg-4">
+						<div class="col-1 col-sm-3 col-md-4  col-lg-5" />
+						<div class="col-10 col-sm-7 col-md-4 col-lg-2">
 							<Carousel>
 								{imgData.map((ele) => (
 									<Carousel.Item>
@@ -114,7 +118,7 @@ axios(config)
 								))}
 							</Carousel>
 						</div>
-						<div class="col-1 col-sm-2 col-md-4" />
+						<div class="col-1 col-sm-2 col-md-4 col-lg-5" />
 					</div>
 				</div>
 
@@ -147,12 +151,14 @@ axios(config)
 						</div>
 					</div>
 				</div>
-
+</div>
+<div style={{ marginTop: '154%' }}>
 				<div className={styles.wrapper3}>
 					{variant.map((ele) => {
 						return (
 							<div class="container-fluid">
 								<div className={`row`}>
+                                {ele.inventory_quantity!==0?
 									<div
 										className={` ${styles.item3}`}
 										style={{
@@ -162,7 +168,31 @@ axios(config)
                                             borderRadius:'50%'
 										}}
 										onClick={() => titleChange(ele.title, ele.images, ele.offers)}
-									/>
+									/>:
+                                    <div
+										className={` ${styles.item3}`}
+										style={{
+											'background-color': `${ele.hexCode}`,
+											height: '55px',
+                                            width: '55px',
+                                            borderRadius:'50%'
+										}}
+										onClick={() => titleChange(ele.title, ele.images, ele.offers)}
+									>
+                                                            <div style={{border:"2px solid white",width:"56px",marginTop:"30px",transform:"rotate(105deg)"}}></div>
+
+                                    </div>}
+                                    {/* <div>{ele.inventory_quantity}</div> */}
+                                    {/* <div
+										className={` ${styles.item3}`}
+										style={{
+											'background-color': `${ele.hexCode}`,
+											height: '55px',
+                                            width: '55px',
+                                            borderRadius:'50%'
+										}}
+										onClick={() => titleChange(ele.title, ele.images, ele.offers)}
+									/> */}
 								</div>
 							</div>
 						);
@@ -310,8 +340,10 @@ axios(config)
 						/>
 					</div>
 				</div>
+                
 			)}
 		</div>
+        </div>
 	);
 }
 

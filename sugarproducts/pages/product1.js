@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import styles from '../styles/Products.module.css';
 import { Button, Modal } from 'react-bootstrap';
 import Carousel from 'react-bootstrap/Carousel';
@@ -8,6 +8,7 @@ import Truncate from 'react-truncate';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 export default function Product1({ data }) {
+	console.log('product1');
 	const [ expand, setexpand ] = useState(false);
 	const [ rmore, setrmore ] = useState(false);
 	const [ truncate, settruncate ] = useState(false);
@@ -15,7 +16,9 @@ export default function Product1({ data }) {
 	const [ productData, setProductData ] = useState(data);
 	const [ imgData, setimgData ] = useState(productData && productData.resbody.variants[0].images);
 	const [ price, setprice ] = useState(productData && productData.resbody.variants[0].price);
-	const [ compare_at_price, setcompare_at_price ] = useState(productData && productData.resbody.variants[0].compare_at_price);
+	const [ compare_at_price, setcompare_at_price ] = useState(
+		productData && productData.resbody.variants[0].compare_at_price
+	);
 	const [ offerText, setofferText ] = useState(productData && productData.resbody.variants[0].offers);
 	const [ pinchange, setpinchange ] = useState('');
 	const [ deliveryData, setDeliveryData ] = useState({});
@@ -26,11 +29,6 @@ export default function Product1({ data }) {
 	const handleShow = () => setShow(true);
 
 	const tnc = offerText.map((ele) => ele.tnc);
-
-	console.log(tnc);
-
-	//   console.log((imgData))
-	console.log('offertext', offerText);
 	const handleToggle = () => {
 		setexpand(!expand);
 	};
@@ -80,34 +78,42 @@ export default function Product1({ data }) {
 			.catch(function(error) {
 				console.log(error);
 			});
-    };
-    
-    const handleCart = () =>{
-var data = '{\r\n    "is_gwp": 0,\r\n    "product_id": 4352967049299,\r\n    "quantity": 1,\r\n    "sugar_product_type": 0,\r\n    "variant_id": 31194979729491,\r\n    "customer_id": 2168277991507\r\n}';
+	};
 
-var config = {
-  method: 'post',
-  url: 'https://qa.api.sugarcosmetics.com/cart/qa/addItemToCartV2',
-  headers: { 
-    'authorization': ' XT4ROmmNaPpgEsmmGzcPfvc69YK3RPSP', 
-    'cache-control': ' no-cache', 
-    'content-type': ' application/json', 
-    'os_type': ' 1', 
-    'postman-token': ' 2267724c-1856-f979-6b4c-97900eaf4ac0', 
-    'version': ' 51'
-  },
-  data : data
-};
+	const handleCart = () => {
+		var data =
+			'{\r\n    "is_gwp": 0,\r\n    "product_id": 4352967049299,\r\n    "quantity": 1,\r\n    "sugar_product_type": 0,\r\n    "variant_id": 31194979729491,\r\n    "customer_id": 2168277991507\r\n}';
 
-axios(config)
-.then(function (response) {
-  console.log(JSON.stringify(response.data));
-})
-.catch(function (error) {
-  console.log(error);
-});
+		var config = {
+			method: 'post',
+			url: 'https://qa.api.sugarcosmetics.com/cart/qa/addItemToCartV2',
+			headers: {
+				authorization: ' XT4ROmmNaPpgEsmmGzcPfvc69YK3RPSP',
+				'cache-control': ' no-cache',
+				'content-type': ' application/json',
+				os_type: ' 1',
+				'postman-token': ' 2267724c-1856-f979-6b4c-97900eaf4ac0',
+				version: ' 51'
+			},
+			data: data
+		};
 
-    }
+		axios(config)
+			.then(function(response) {
+				console.log(JSON.stringify(response.data));
+			})
+			.catch(function(error) {
+				console.log(error);
+			});
+	};
+
+	const createRef = useRef();
+	onSwipedLeft: () => {
+		createRef.current.next();
+	};
+	onSwipedRight: () => {
+		createRef.current.prev();
+	};
 
 	return (
 		<div>
@@ -123,12 +129,20 @@ axios(config)
 						<div className="row">
 							<div className="col-1 col-sm-3 col-md-4  col-lg-5" />
 							<div className="col-10 col-sm-7 col-md-4 col-lg-2">
-								<Carousel>
-									{imgData && imgData.map((ele) => (
-										<Carousel.Item>
-											<img className="d-block w-100" src={ele} alt="First slide" />
-										</Carousel.Item>
-									))}
+								<Carousel
+									touch={true}
+									slide={true}
+									ref={createRef}
+									controls={false}
+									indicators={true}
+									interval={3500}
+								>
+									{imgData &&
+										imgData.map((ele) => (
+											<Carousel.Item>
+												<img className="d-block w-100" src={ele} alt="First slide" />
+											</Carousel.Item>
+										))}
 								</Carousel>
 							</div>
 							<div className="col-1 col-sm-2 col-md-4 col-lg-5" />
@@ -206,11 +220,13 @@ axios(config)
 						</div>
 					</div>
 
-                    <div className={`container-fluid mx-5 my-3 fixed-bottom ${styles.cartDiv}`}>
+					<div className={`container-fluid mx-5 my-3 fixed-bottom ${styles.cartDiv}`}>
 						<div className={styles.likeIcon}>
 							<FavoriteBorderIcon style={{ fontSize: 45 }} />
 						</div>
-						<div className={styles.cartButton} onClick={handleCart}>ADD TO CART</div>
+						<div className={styles.cartButton} onClick={handleCart}>
+							ADD TO CART
+						</div>
 					</div>
 
 					<div className="container-fluid mx-1 mt-4 mb-4">
@@ -298,7 +314,8 @@ axios(config)
 							</span>
 						)}
 					</div>
-					{productData && productData.resbody.youtube_id && (
+					{productData &&
+					productData.resbody.youtube_id && (
 						<div className="container mt-3">
 							<div className="">
 								<iframe
@@ -318,27 +335,3 @@ axios(config)
 		</div>
 	);
 }
-
-// export async function getStaticProps() {
-// 	var axios = require('axios');
-
-// 	var config = {
-// 		method: 'get',
-// 		url: 'https://qa.api.sugarcosmetics.com/products/qa/getProductsv2?handle=aquaholic-priming-moisturizer',
-// 		headers: {}
-// 	};
-
-// 	let data = await axios(config)
-// 		.then(function(response) {
-// 			return response.data;
-// 		})
-// 		.catch(function(error) {
-// 			console.log(error);
-// 		});
-
-// 	return {
-// 		props: {
-// 			data
-// 		}
-// 	};
-// }

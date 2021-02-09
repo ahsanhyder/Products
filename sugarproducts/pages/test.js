@@ -58,35 +58,29 @@ export default function product1({ data }) {
 			</div>
 			<div style={{ overflowX: 'hidden' }}>
 				
-
+            <div class="container-fluid">
+  <div class="fixed-top bg-primary">
+    <h1>Hello</h1>
+  </div>
+  <div style>
+    <h2>hii</h2>
+    <h2>hii</h2>
+    <h2>hii</h2>
+    <h2>hii</h2>
+    <h2>hii</h2>
+     <h2>hii</h2>
+    <h2>hii</h2>
+    <h2>hii</h2>
+    <h2>hii</h2>
+     <h2>hii</h2>
+    <h2>hii</h2>
+    <h2>hii</h2>
+    <h2>hii</h2>
+  </div>
+</div>
 				
 				
-				<div class="container-fluid mx-1 mt-4 mb-4">
-					<div class="my-2">
-						<span class="px-1" style={{ fontWeight: 'bold' }}>
-							Delivery Details
-						</span>
-					</div>
-                    <div className={styles.wrapper}>
-                        <h2 className="item">Box 1</h2>
-                        <h2 className="item">Box 2</h2>
-                        <h2 className="item">Box 3</h2>
-                        <h2 className="item">Box 1</h2>
-                        <h2 className="item">Box 2</h2>
-                        <h2 className="item">Box 3</h2>
-                        <h2 className="item">Box 1</h2>
-                        <h2 className="item">Box 2</h2>
-                        <h2 className="item">Box 3</h2>
-                        <h2 className="item">Box 2</h2>
-                        <h2 className="item">Box 3</h2>
-                        <h2 className="item">Box 1</h2>
-                        <h2 className="item">Box 2</h2>
-                        </div>
-					
 				</div>
-
-				</div>
-		</div>
 	);
 }
 

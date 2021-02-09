@@ -101,7 +101,9 @@ axios(config)
 				</Head>
 			</div>
 			<div style={{ overflowX: 'hidden' }}>
-				<div class={`container-fluid mt-3 mb-3 ${styles.sticky}`}>
+            <div className="fixed-top" style={{ backgroundColor: 'white' }}>
+
+				<div class={`container-fluid mt-3 mb-3`}>
 					<div class="row">
 						<div class="col-1 col-sm-3 col-md-4  " />
 						<div class="col-10 col-sm-7 col-md-4 col-lg-4">
@@ -118,19 +120,6 @@ axios(config)
 				</div>
 
                 <div className={styles.wrapper}>
-                        {/* <h2 className="item">Box 1</h2>
-                        <h2 className="item">Box 2</h2>
-                        <h2 className="item">Box 3</h2>
-                        <h2 className="item">Box 1</h2>
-                        <h2 className="item">Box 2</h2>
-                        <h2 className="item">Box 3</h2>
-                        <h2 className="item">Box 1</h2>
-                        <h2 className="item">Box 2</h2>
-                        <h2 className="item">Box 3</h2>
-                        <h2 className="item">Box 2</h2>
-                        <h2 className="item">Box 3</h2>
-                        <h2 className="item">Box 1</h2>
-                        <h2 className="item">Box 2</h2> */}
                         
 
 {selectPrice.map((ele) => {
@@ -150,6 +139,7 @@ axios(config)
 				})}
 
                     </div>
+                   
 
 
 				{/* {selectPrice.map((ele) => {
@@ -192,7 +182,8 @@ axios(config)
 						</div>
 					</div>
 				</div>
-
+                </div>
+<div style={{ marginTop: '110%' }}>
 				<div class="container-fluid mx-2">
 					<div class="row mt-2 mb-2">
 						<div class="col">
@@ -344,6 +335,7 @@ axios(config)
 				</div>
 			</div>
 		</div>
+        </div>
 	);
 }
 
