@@ -19,14 +19,14 @@ export default function Product2({ data }) {
 	const [ compare_at_price, setcompare_at_price ] = useState(
 		productData && productData.resbody.variants[0].compare_at_price
 	);
-	const [varientIndex, setvarientIndex] = useState(productData && productData.resbody.variants[0].index)
+	const [ varientIndex, setvarientIndex ] = useState(productData && productData.resbody.variants[0].index);
 	const [ offerText, setofferText ] = useState(productData && productData.resbody.variants[0].offers);
 	const [ products, setproducts ] = useState(productData && productData.resbody.sugar_options);
 	const [ productTitle, setproductTitle ] = useState(
 		productData && productData.resbody.sugar_options[0].products.title
 	);
 	const [ sugarOptionsTitle, setsugarOptionsTitle ] = useState(productData && productData.resbody.sugar_options);
-	const [activeVariant,setactiveVariant] = useState(null)
+	const [ activeVariant, setactiveVariant ] = useState(null);
 
 	const [ show, setShow ] = useState(false);
 	const [ active, setactive ] = useState(false);
@@ -58,7 +58,7 @@ export default function Product2({ data }) {
 
 	const titleChange = (images, ind) => {
 		setimgData(images);
-		setactiveVariant(ind)
+		setactiveVariant(ind);
 	};
 
 	const handleChange = (e) => {
@@ -168,7 +168,7 @@ export default function Product2({ data }) {
 						</div>
 					</div>
 				</div>
-				<div style={{ marginTop: '140%' }}>
+				<div className={styles.marginTopFloat}>
 					<div className="container-fluid mx-2 mb-4 mt-4">
 						{products &&
 							products.map((ele) => {
@@ -192,41 +192,54 @@ export default function Product2({ data }) {
 										</div>
 
 										<div className="d-flex nowrap">
-											{ele.products.map((elem,index) => (
-											<div>
-													{activeVariant===index ? 
-												<div style={{height:"65px", width:"65px",borderRadius:"50%",border:"1px solid black",margin:"4px"}}>
-												<div
-													className=""
-													style={{
-														'background-color': `${elem.hexCode}`,
-														height: '55px',
-														width: '55px',
-														margin: '3px',
-														borderRadius: '50%'
-													}}
-													onClick={() => titleChange(elem.images,index)}
-												/>
+											{ele.products.map((elem, index) => (
+												<div>
+													{activeVariant === index ? (
+														<div
+															style={{
+																height: '65px',
+																width: '65px',
+																borderRadius: '50%',
+																border: '1px solid black',
+																margin: '4px'
+															}}
+														>
+															<div
+																className=""
+																style={{
+																	'background-color': `${elem.hexCode}`,
+																	height: '55px',
+																	width: '55px',
+																	margin: '3px',
+																	borderRadius: '50%'
+																}}
+																onClick={() => titleChange(elem.images, index)}
+															/>
+														</div>
+													) : (
+														<div
+															style={{
+																height: '65px',
+																width: '65px',
+																borderRadius: '50%',
+																margin: '4px'
+															}}
+														>
+															<div
+																className=""
+																style={{
+																	'background-color': `${elem.hexCode}`,
+																	height: '55px',
+																	width: '55px',
+																	margin: '3px',
+																	borderRadius: '50%'
+																}}
+																onClick={() => titleChange(elem.images, index)}
+															/>
+														</div>
+													)}
 												</div>
-												:
-												<div style={{height:"65px", width:"65px",borderRadius:"50%",margin:"4px"}}>
-												<div
-													className=""
-													style={{
-														'background-color': `${elem.hexCode}`,
-														height: '55px',
-														width: '55px',
-														margin: '3px',
-														borderRadius: '50%'
-													}}
-													onClick={() => titleChange(elem.images,index)}
-												/>
-												
-												</div>
-											 }
-												</div>
-											)
-											)}
+											))}
 										</div>
 									</div>
 								);
@@ -278,13 +291,19 @@ export default function Product2({ data }) {
 							)}
 						</div>
 					</div>
-					<div className={`container-fluid mx-5 my-3 fixed-bottom ${styles.cartDiv}`}>
-						<div className={styles.likeIcon}>
-							<FavoriteBorderIcon style={{ fontSize: 45 }} />
+					<div className="container-fluid">
+						<div className="col-1 col-sm-2 col-md-4 col-lg-4 " />
+						<div
+							className={`container-fluid col-10 col-sm-8 col-md-4 col-lg-4 fixed-bottom ${styles.cartDiv}`}
+						>
+							<div className={styles.likeIcon}>
+								<FavoriteBorderIcon style={{ fontSize: 45 }} />
+							</div>
+							<div className={styles.cartButton} onClick={handleCart}>
+								ADD TO CART
+							</div>
 						</div>
-						<div className={styles.cartButton} onClick={handleCart}>
-							ADD TO CART
-						</div>
+						<div className="col-1 col-sm-2 col-md-4 col-lg-4 " />
 					</div>
 
 					<div className="container-fluid mx-1 mt-4 mb-4">
@@ -317,11 +336,6 @@ export default function Product2({ data }) {
 							</span>
 							<h5 className="mt-3">{deliveryData.message}</h5>
 						</div>
-					</div>
-					<div>
-						<button type="button" className="btn btn-primary" onClick={handleCart}>
-							Primary
-						</button>
 					</div>
 
 					<div

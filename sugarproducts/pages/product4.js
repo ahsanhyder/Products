@@ -183,7 +183,7 @@ export default function Product4({ data }) {
 						</div>
 					</div>
 				</div>
-				<div style={{ marginTop: '110%' }}>
+				<div className={styles.marginTopFloat4}>
 					<div className="container-fluid mx-2">
 						<div className="row mt-2 mb-2">
 							<div className="col">
@@ -250,13 +250,19 @@ export default function Product4({ data }) {
 						</div>
 					</div>
 
-					<div className={`container-fluid mx-5 my-3 fixed-bottom ${styles.cartDiv}`}>
-						<div className={styles.likeIcon}>
-							<FavoriteBorderIcon style={{ fontSize: 45 }} />
+					<div className="container-fluid">
+						<div className="col-1 col-sm-2 col-md-4 col-lg-4 " />
+						<div
+							className={`container-fluid col-10 col-sm-8 col-md-4 col-lg-4 fixed-bottom ${styles.cartDiv}`}
+						>
+							<div className={styles.likeIcon}>
+								<FavoriteBorderIcon style={{ fontSize: 45 }} />
+							</div>
+							<div className={styles.cartButton} onClick={handleCart}>
+								ADD TO CART
+							</div>
 						</div>
-						<div className={styles.cartButton} onClick={handleCart}>
-							ADD TO CART
-						</div>
+						<div className="col-1 col-sm-2 col-md-4 col-lg-4 " />
 					</div>
 
 					<div className="container-fluid mx-1 mt-4 mb-4">

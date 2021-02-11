@@ -21,7 +21,7 @@ export default function product3({ data }) {
 	const [ compare_at_price, setcompare_at_price ] = useState(
 		productData && productData.resbody.variants[0].compare_at_price
 	);
-	const [varientIndex, setvarientIndex] = useState(productData && productData.resbody.variants[0].index)
+	const [varientIndex, setvarientIndex] = useState(productData && productData.resbody.variants[0])
 
 	const [activeVariant,setactiveVariant] = useState(0)
 	const [ products, setproducts ] = useState(productData && productData.resbody.sugar_options);
@@ -189,31 +189,36 @@ export default function product3({ data }) {
 						</div>
 					</div>
 				</div>
-				<div style={{ marginTop: '154%' }}>
+				<div className={styles.marginTopFloat2}>
 					<div className={styles.wrapper3}>
 						{variant &&
-							variant.map((ele) => {
+							variant.map((ele,index) => {
 								return (
 									<div className="container-fluid">
 										<div className={`row`}>
-											{ele.inventory_quantity !== 0 && activeVariant===index  ? (
-												<div
+											{activeVariant===index ? <>
+											{ele.inventory_quantity !==0 ?	<div style={{height:"70px", width:"70px",borderRadius:"50%",border:"1px solid black",marginRight:"14px"}}>
+
+<div
+	className={` ${styles.item3}`}
+	style={{
+		'background-color': `${ele.hexCode}`,
+		height: '55px',
+		width: '55px',
+		marginTop:"7px",
+		marginLeft:"-7px",
+		borderRadius: '50%'
+	}}
+	onClick={() => titleChange(ele.title, ele.images, ele.offers,index)}
+/></div>  : <div style={{height:"70px", width:"70px",borderRadius:"50%",border:"1px solid black",marginRight:"14px"}}>
+<div
 													className={` ${styles.item3}`}
 													style={{
 														'background-color': `${ele.hexCode}`,
 														height: '55px',
 														width: '55px',
-														borderRadius: '50%'
-													}}
-													onClick={() => titleChange(ele.title, ele.images, ele.offers,index)}
-												/>
-											) : (
-												<div
-													className={` ${styles.item3}`}
-													style={{
-														'background-color': `${ele.hexCode}`,
-														height: '55px',
-														width: '55px',
+														marginTop:"-9px",
+														marginLeft:"-7px",
 														borderRadius: '50%'
 													}}
 													onClick={() => titleChange(ele.title, ele.images, ele.offers,index)}
@@ -221,13 +226,50 @@ export default function product3({ data }) {
 													<div
 														style={{
 															border: '2px solid white',
-															width: '56px',
-															marginTop: '30px',
+															width: '99px',
+															marginTop: '15px',
+															marginBottom:"3px",
 															transform: 'rotate(105deg)'
 														}}
 													/>
 												</div>
-											)}
+	</div>}
+											</>:<>
+											{ele.inventory_quantity !== 0 ?
+											<div
+											className={` ${styles.item3}`}
+											style={{
+												'background-color': `${ele.hexCode}`,
+												height: '55px',
+												width: '55px',
+												marginTop:"7px",
+		marginLeft:"-7px",
+												borderRadius: '50%'
+											}}
+											onClick={() => titleChange(ele.title, ele.images, ele.offers,index)}
+										/>
+											 : 												<div
+											 className={` ${styles.item3}`}
+											 style={{
+												 'background-color': `${ele.hexCode}`,
+												 height: '55px',
+												 width: '55px',
+												 marginTop:"7px",
+		marginLeft:"-7px",
+												 borderRadius: '50%'
+											 }}
+											 onClick={() => titleChange(ele.title, ele.images, ele.offers,index)}
+										 >
+											 <div
+												 style={{
+													 border: '2px solid white',
+													 width: '55px',
+													 marginTop: '30px',
+													 transform: 'rotate(105deg)'
+												 }}
+											 />
+										 </div>}
+											</>}
 										</div>
 									</div>
 								);
@@ -280,13 +322,17 @@ export default function product3({ data }) {
 						</div>
 					</div>
 
-					<div className={`container-fluid mx-5 my-3 fixed-bottom ${styles.cartDiv}`}>
+					<div className="container-fluid">
+					<div className="col-1 col-sm-2 col-md-4 col-lg-4 " />
+					<div className={`container-fluid col-10 col-sm-8 col-md-4 col-lg-4 fixed-bottom ${styles.cartDiv}`}>
 						<div className={styles.likeIcon}>
 							<FavoriteBorderIcon style={{ fontSize: 45 }} />
 						</div>
 						<div className={styles.cartButton} onClick={handleCart}>
 							ADD TO CART
 						</div>
+					</div>
+					<div className="col-1 col-sm-2 col-md-4 col-lg-4 " />
 					</div>
 
 					<div className="container-fluid mx-1 mt-4 mb-4">
