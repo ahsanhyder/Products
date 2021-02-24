@@ -6,6 +6,7 @@ import Carousel from 'react-bootstrap/Carousel';
 import axios from 'axios';
 import Truncate from 'react-truncate';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import ProductNavbar from './ProductNavbar'
 
 export default function Product1({ data }) {
 	console.log('product1');
@@ -28,7 +29,7 @@ export default function Product1({ data }) {
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
 
-	const tnc = offerText.map((ele) => ele.tnc);
+	// const tnc = offerText.map((ele) => ele.tnc);
 	const handleToggle = () => {
 		setexpand(!expand);
 	};
@@ -54,8 +55,8 @@ export default function Product1({ data }) {
 	};
 
 	const deliveryUpdate = () => {
-		if (pinchange.length === 0) {
-			return;
+		if (pinchange.length<6) {
+			console.log("Please enter a valid Pincode")
 		}
 
 		var data = JSON.stringify({ pincode: pinchange });
@@ -80,29 +81,27 @@ export default function Product1({ data }) {
 			});
 	};
 
-	const handleCart = () => {
-		var data =
-			'{\r\n    "is_gwp": 0,\r\n    "product_id": 4352967049299,\r\n    "quantity": 1,\r\n    "sugar_product_type": 0,\r\n    "variant_id": 31194979729491,\r\n    "customer_id": 2168277991507\r\n}';
-
+	const handleCart = (varId, prodId) => {
+		console.log(varId, prodId);
+		var data = {
+			product_id: prodId,
+			variant_id: varId,
+			quantity: 1,
+			customer_id: 2168277991507
+		};
 		var config = {
 			method: 'post',
 			url: 'https://qa.api.sugarcosmetics.com/cart/qa/addItemToCartV2',
 			headers: {
-				authorization: ' XT4ROmmNaPpgEsmmGzcPfvc69YK3RPSP',
-				'cache-control': ' no-cache',
-				'content-type': ' application/json',
-				os_type: ' 1',
-				'postman-token': ' 2267724c-1856-f979-6b4c-97900eaf4ac0',
-				version: ' 51'
+				Authorization: 'XT4ROmmNaPpgEsmmGzcPfvc69YK3RPSP'
 			},
 			data: data
 		};
-
 		axios(config)
-			.then(function(response) {
-				console.log(JSON.stringify(response.data));
+			.then((res) => {
+				console.log(res.data);
 			})
-			.catch(function(error) {
+			.catch((error) => {
 				console.log(error);
 			});
 	};
@@ -117,16 +116,15 @@ export default function Product1({ data }) {
 
 	return (
 		<div>
-			<div>
-				<Head>
-					<title>Create Next App</title>
-					<link rel="icon" href="/favicon.ico" />
-				</Head>
-			</div>
 			<div style={{ overflowX: 'hidden' }}>
+				<div>
 				<div className="fixed-top" style={{ backgroundColor: 'white' }}>
 					<div className="container-fluid mt-3 mb-3">
-						<div className="row">
+					<div className="mb-5">
+                    <ProductNavbar title={productData && productData.resbody.title}/>
+                    </div>
+					<div className="mt-5"></div>						
+					<div className="row" >
 							<div className="col-1 col-sm-3 col-md-4  col-lg-5" />
 							<div className="col-10 col-sm-7 col-md-4 col-lg-2">
 								<Carousel
@@ -140,7 +138,7 @@ export default function Product1({ data }) {
 									{imgData &&
 										imgData.map((ele) => (
 											<Carousel.Item>
-												<img className="d-block w-100" src={ele} alt="First slide" />
+												<img className="d-block w-100" height="350px" src={ele} alt="First slide" />
 											</Carousel.Item>
 										))}
 								</Carousel>
@@ -174,7 +172,8 @@ export default function Product1({ data }) {
 						</div>
 					</div>
 				</div>
-				<div className={styles.marginTopFloat}>
+				</div>
+				<div style={{paddingTop:"580px"}}>
 					<div className="container-fluid mx-2">
 						<div className="row">
 							<div class="col">
@@ -191,25 +190,26 @@ export default function Product1({ data }) {
 								}
 								onTruncate={handletruncate}
 							>
-								{offerText.map((ele) => (
-									<div>
-										{ele.productOfferText}
-										<br />
+								{offerText &&
+									offerText.map((ele) => (
+										<div>
+											{ele.productOfferText}
+											<br />
 
-										<Button variant="primary" onClick={handleShow}>
-											Know More
-										</Button>
+											<Button variant="primary" onClick={handleShow}>
+												Know More
+											</Button>
 
-										<Modal show={show} onHide={handleClose}>
-											<Modal.Header closeButton>
-												<Modal.Title> Terms & Conditions</Modal.Title>
-											</Modal.Header>
-											<Modal.Body>
-												<p>{ele.tnc}</p>
-											</Modal.Body>
-										</Modal>
-									</div>
-								))}
+											<Modal show={show} onHide={handleClose}>
+												<Modal.Header closeButton>
+													<Modal.Title> Terms & Conditions</Modal.Title>
+												</Modal.Header>
+												<Modal.Body>
+													<p>{ele.tnc}</p>
+												</Modal.Body>
+											</Modal>
+										</div>
+									))}
 							</Truncate>
 							{!truncate &&
 							expand && (
@@ -228,7 +228,15 @@ export default function Product1({ data }) {
 							<div className={styles.likeIcon}>
 								<FavoriteBorderIcon style={{ fontSize: 45 }} />
 							</div>
-							<div className={styles.cartButton} onClick={handleCart}>
+							<div
+								className={styles.cartButton}
+								onClick={handleCart}
+								onClick={() =>
+									handleCart(
+										productData && productData.resbody.variants[0].id,
+										productData && productData.resbody.id
+									)}
+							>
 								ADD TO CART
 							</div>
 						</div>
@@ -241,7 +249,7 @@ export default function Product1({ data }) {
 								Delivery Details
 							</span>
 						</div>
-						<div className="mx-4 mt-2 mb-2">
+						<div className="d-flex justify-content-between">
 							<span className="">
 								<input
 									className="text-center"
@@ -263,40 +271,47 @@ export default function Product1({ data }) {
 							>
 								CHECK
 							</span>
-							<h5 className="mt-3">{deliveryData.message}</h5>
 						</div>
+						{/* {pinchange.length<6?<h6 className="mt-3">{deliveryData.message}</h6>} */}
+						<h6 className="mt-3">{deliveryData.message}</h6>
 					</div>
 
 					<div
-						className="container-fluid  px-2 mt-4 mb-4"
+						className="my-2 mx-1"
 						style={{
 							fontSize: '12px'
 						}}
 					>
-						<div style={{ border: '1px solid black' }} className="py-3 px-1">
-							<span className="">
-								<img src="/Cruelty_Free.png" width="23" alt="Cruelty Free img" />
-							</span>
-							<span>
-								<span className="mx-1 " style={{ fontWeight: 'bold' }}>
-									Cruelty Free
+						<div style={{ border: '1px solid black' }} className="d-flex justify-content-between py-3 px-1">
+							<div>
+								<span className="px-1">
+									<img src="/Cruelty_Free.png" width="23" alt="Cruelty Free img" />
 								</span>
-							</span>
-							<span className="px-1">
-								<img src="/Quality_First.png" width="23" alt="Quality First img" />
-							</span>
-							<span className="mx-1" style={{ fontWeight: 'bold' }}>
-								<span>Quality First</span>
-							</span>
-							<span className="px-1">
-								<img className src="/Easy_Returns.png" width="23" alt="Easy Returns img" />
-							</span>
-							<span>
-								<span style={{ fontWeight: 'bold' }}>Easy Return policy</span>
-							</span>
+								<span>
+									<span className="" style={{ fontWeight: 'bold' }}>
+										Cruelty Free
+									</span>
+								</span>
+							</div>
+							<div>
+								<span className="px-1">
+									<img src="/Quality_First.png" width="23" alt="Quality First img" />
+								</span>
+								<span className="" style={{ fontWeight: 'bold' }}>
+									<span>Quality First</span>
+								</span>
+							</div>
+							<div>
+								<span className="px-1">
+									<img className src="/Easy_Returns.png" width="23" alt="Easy Returns img" />
+								</span>
+								<span>
+									<span style={{ fontWeight: 'bold' }}>Easy Return policy</span>
+								</span>
+							</div>
 						</div>
 					</div>
-					<div className="container-fluid mx-2">
+					<div className={`container-fluid mx-2 ${styles.description}`}>
 						<div className="row">
 							<div className="col">
 								<h6 className={styles.headingMain}>PRODUCT DESCRIPTION</h6>
@@ -311,7 +326,9 @@ export default function Product1({ data }) {
 							}
 							onTruncate={handlertruncate}
 						>
-							<div dangerouslySetInnerHTML={{ __html: [ productData.resbody.body_html ] }} />
+							<div
+								dangerouslySetInnerHTML={{ __html: [ productData && productData.resbody.body_html ] }}
+							/>
 						</Truncate>
 						{!rtruncate &&
 						rmore && (
@@ -322,12 +339,12 @@ export default function Product1({ data }) {
 					</div>
 					{productData &&
 					productData.resbody.youtube_id && (
-						<div className="container mt-3">
+						<div className="container mt-1" style={{ marginBottom: '110px' }}>
 							<div className="">
 								<iframe
 									className="bye"
 									width="100%"
-									height="250px"
+									height="200px"
 									src={`https://www.youtube.com/embed/${productData.resbody.youtube_id}`}
 									frameBorder="0"
 									allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

@@ -6,9 +6,12 @@ import Carousel from 'react-bootstrap/Carousel';
 import axios from 'axios';
 import Truncate from 'react-truncate';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import ProductNavbar from './ProductNavbar'
 
-export default function Product2({ data }) {
+
+export default function Product3({ data }) {
 	console.log('product2');
+	const [ cartVariants, setcartVariants ] = useState([]);
 	const [ expand, setexpand ] = useState(false);
 	const [ rmore, setrmore ] = useState(false);
 	const [ truncate, settruncate ] = useState(false);
@@ -20,11 +23,10 @@ export default function Product2({ data }) {
 		productData && productData.resbody.variants[0].compare_at_price
 	);
 	const [ varientIndex, setvarientIndex ] = useState(productData && productData.resbody.variants[0].index);
+	const [ variantId, setVariantId ] = useState(productData.resbody.variants[0].id);
 	const [ offerText, setofferText ] = useState(productData && productData.resbody.variants[0].offers);
 	const [ products, setproducts ] = useState(productData && productData.resbody.sugar_options);
-	const [ productTitle, setproductTitle ] = useState(
-		productData && productData.resbody.sugar_options[0].products.title
-	);
+	const [ productTitle, setproductTitle ] = useState('');
 	const [ sugarOptionsTitle, setsugarOptionsTitle ] = useState(productData && productData.resbody.sugar_options);
 	const [ activeVariant, setactiveVariant ] = useState(null);
 
@@ -56,9 +58,39 @@ export default function Product2({ data }) {
 		}
 	};
 
-	const titleChange = (images, ind) => {
+	const titleChange = (images, mainId, mainTitle, variantTitle, variantId) => {
+		console.log(images, mainId, mainTitle, variantTitle, variantId, 'in title change');
+		var img = images[0];
+		console.log(img);
+		var obj = {
+			image_url: img,
+			product_id: mainId,
+			product_title: mainTitle,
+			title: variantTitle,
+			variant_id: variantId
+		};
+		if (cartVariants.length > 0) {
+			var cartFlag = false;
+			for (var i = 0; i < cartVariants.length; i++) {
+				if (cartVariants[i].product_id == mainId) {
+					cartVariants[i] = obj;
+					cartFlag = true;
+					break;
+				}
+			}
+
+			if (cartFlag == false) {
+				cartVariants.push(obj);
+			}
+		} else {
+			cartVariants.push(obj);
+		}
+
 		setimgData(images);
-		setactiveVariant(ind);
+		// 		setactiveVariant(ind);
+		// 		setVariantId(id);
+		// 		setproductTitle(title)
+		// console.log(setproductTitle(title))
 	};
 
 	const handleChange = (e) => {
@@ -66,27 +98,38 @@ export default function Product2({ data }) {
 	};
 
 	const handleCart = () => {
-		var data =
-			'{\r\n    "is_gwp": 0,\r\n    "product_id": 9448894348,\r\n    "quantity": 1,\r\n    "sugar_product_type": 1,\r\n    "variant_id": 12102682837060,\r\n    "customer_id": 2168277991507\r\n}';
+		// console.log(varId,prodId)
 
-		var config = {
-			method: 'post',
-			url: 'https://qa.api.sugarcosmetics.com/cart/qa/addItemToCartV2',
-			headers: {
-				Authorization: ' XT4ROmmNaPpgEsmmGzcPfvc69YK3RPSP',
-				'Content-Type': ' application/json',
-				version: ' 51'
-			},
-			data: data
-		};
-
-		axios(config)
-			.then(function(response) {
-				console.log(JSON.stringify(response.data));
-			})
-			.catch(function(error) {
-				console.log(error);
-			});
+		if (cartVariants.length == products.length) {
+			console.log(cartVariants);
+			var data = {
+				is_gwp: 0,
+				product_id: productData.resbody.variants[0].product_id,
+				product_options_kit: cartVariants,
+				variant_id: productData.resbody.variants[0].id,
+				sugar_product_type: 2,
+				quantity: 1,
+				customer_id: 3201015742547
+			};
+			console.log(data);
+			var config = {
+				method: 'post',
+				url: 'https://qa.api.sugarcosmetics.com/cart/qa/addItemToCartV2',
+				headers: {
+					Authorization: 'rXPinYygMxB8ze5XaKt1kmLtN5vEcQ7B'
+				},
+				data: data
+			};
+			axios(config)
+				.then((res) => {
+					console.log(res.data);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		} else {
+			alert('Please pick a variant to add this product to your cart');
+		}
 	};
 
 	const deliveryUpdate = () => {
@@ -115,26 +158,30 @@ export default function Product2({ data }) {
 				console.log(error);
 			});
 	};
-
+	console.log(cartVariants, 'cart');
 	return (
 		<div>
-			<div>
+			{/* <div>
 				<Head>
 					<title>Create Next App</title>
 					<link rel="icon" href="/favicon.ico" />
 				</Head>
-			</div>
+			</div> */}
 			<div style={{ overflowX: 'hidden' }}>
-				<div className="fixed-top" style={{ backgroundColor: 'white' }}>
+				<div className="fixed-top mt-5" style={{ backgroundColor: 'white' }}>
 					<div className={`container-fluid mt-3 mb-3 ${styles.sticky}`}>
-						<div className="row">
+					<div className="mb-5">
+                    <ProductNavbar title={productData && productData.resbody.title}/>
+                    </div>
+                    <div className="mt-5"></div>
+						<div className="row mt-5">
 							<div className="col-1 col-sm-3 col-md-4 col-lg-5 " />
 							<div className="col-10 col-sm-7 col-md-4 col-lg-2">
 								<Carousel controls={false}>
 									{imgData &&
 										imgData.map((ele) => (
 											<Carousel.Item>
-												<img className="d-block w-100" src={ele} alt="First slide" />
+												<img className="d-block w-100" height="350px" src={ele} alt="First slide" />
 											</Carousel.Item>
 										))}
 								</Carousel>
@@ -168,7 +215,7 @@ export default function Product2({ data }) {
 						</div>
 					</div>
 				</div>
-				<div className={styles.marginTopFloat}>
+				<div style={{paddingTop:"580px"}}>
 					<div className="container-fluid mx-2 mb-4 mt-4">
 						{products &&
 							products.map((ele) => {
@@ -185,59 +232,59 @@ export default function Product2({ data }) {
 													<div
 														className={`col-8  text-center border d-flex justify-content-center align-items-center ${styles.divp21} `}
 													>
-														{ele1.title}
+														{/* {ele1.title} */}
+														{/* {console.log(ele1.title)} */}
+														{cartVariants.length > 0 ? cartVariants.filter(
+															(item) => item.product_title == ele.title && item
+														).length > 0 ? (
+															cartVariants
+																.filter(
+																	(item) => item.product_title == ele.title && item
+																)
+																.map((titleVar) => titleVar.title)
+														) : (
+															'- SELECT VARIANT -'
+														) : (
+															'- SELECT VARIANT -'
+														)}
 													</div>
 												);
 											})}
 										</div>
 
-										<div className="d-flex nowrap">
-											{ele.products.map((elem, index) => (
+										<div className={`d-flex ${styles.wrapperp3}`}>
+											{ele.products.map((elem) => (
 												<div>
-													{activeVariant === index ? (
+													<div
+														className={`${cartVariants.length > 0
+															? cartVariants.filter(
+																	(item) => item.variant_id === elem.id && item
+																).length > 0
+																? `${styles.product3Active}`
+																: `${styles.product3Normal}`
+															: `${styles.product3Normal}`}`}
+													>
 														<div
+															className={`${styles.itemp3}    `}
 															style={{
-																height: '65px',
-																width: '65px',
-																borderRadius: '50%',
-																border: '1px solid black',
-																margin: '4px'
+																'background-color': `${elem.hexCode}`,
+																height: '55px',
+																width: '45px',
+																// margin: '4px',
+																marginLeft: '4px',
+																marginTop: '5px',
+																borderRadius: '50%'
 															}}
-														>
-															<div
-																className=""
-																style={{
-																	'background-color': `${elem.hexCode}`,
-																	height: '55px',
-																	width: '55px',
-																	margin: '3px',
-																	borderRadius: '50%'
-																}}
-																onClick={() => titleChange(elem.images, index)}
-															/>
-														</div>
-													) : (
-														<div
-															style={{
-																height: '65px',
-																width: '65px',
-																borderRadius: '50%',
-																margin: '4px'
-															}}
-														>
-															<div
-																className=""
-																style={{
-																	'background-color': `${elem.hexCode}`,
-																	height: '55px',
-																	width: '55px',
-																	margin: '3px',
-																	borderRadius: '50%'
-																}}
-																onClick={() => titleChange(elem.images, index)}
-															/>
-														</div>
-													)}
+															onClick={() =>
+																titleChange(
+																	elem.images,
+																	elem.product_id,
+																	ele.title,
+																	elem.title,
+																	elem.id
+																)}
+														/>
+													</div>
 												</div>
 											))}
 										</div>
@@ -367,7 +414,7 @@ export default function Product2({ data }) {
 							</span>
 						</div>
 					</div>
-					<div className="container-fluid mx-2">
+					<div className={`container-fluid mx-2 ${styles.description}`}>
 						<div className="row">
 							<div className="col">
 								<h6 className={styles.headingMain}>PRODUCT DESCRIPTION</h6>
@@ -396,12 +443,12 @@ export default function Product2({ data }) {
 				</div>
 				{productData &&
 				productData.resbody.youtube_id && (
-					<div className="container mt-3">
+					<div className="container mt-3" style={{ marginBottom: '80px' }}>
 						<div className="">
 							<iframe
 								className="bye"
 								width="100%"
-								height="250px"
+								height="200px"
 								src={`https://www.youtube.com/embed/${productData.resbody.youtube_id}`}
 								frameBorder="0"
 								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -410,7 +457,8 @@ export default function Product2({ data }) {
 						</div>
 					</div>
 				)}
+				</div>
 			</div>
-		</div>
+		// </div>
 	);
 }

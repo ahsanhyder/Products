@@ -157,7 +157,7 @@ export default function product2({ data }) {
 										})}
 									</div>
 
-									<div class="d-flex nowrap">
+									<div className={`d-flex ${styles.wrapperp3}`}>
 										{ele.products.map((elem) => (
 											// <div class="rounded-circle" style={{
 											//     height: '60px',
@@ -166,7 +166,7 @@ export default function product2({ data }) {
 											//     border: '1px solid black'
 											// }}>
 											<div
-												class=""
+												className={styles.itemp3}
 												style={{
 													'background-color': `${elem.hexCode}`,
 													height: '55px',
@@ -356,7 +356,7 @@ export async function getStaticProps() {
 
 	var config = {
 		method: 'get',
-		url: 'https://qa.api.sugarcosmetics.com/products/qa/getProductsv2?handle=boss-babe-kit',
+		url: 'https://qa.api.sugarcosmetics.com/products/qa/getProductsv2?handle=smudge-me-not-minis-set-red',
 		headers: {}
 	};
 

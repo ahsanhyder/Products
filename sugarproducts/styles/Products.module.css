@@ -67,7 +67,7 @@
   
   .productTitle{
     font-weight: bolder;
-    font-size: larger;
+    font-size: large;
   }
   
   .productTitle1{
@@ -127,7 +127,32 @@
     background-color: #ddd;
 }
 
+.wrapperp3{
+  max-height: 120px;
+  display: flex;
+  overflow-x: auto;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  margin-left: 15px;
+}
 
+.itemp3{
+  margin-right: 40px;
+}
+
+.wrapperp3::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+} 
+
+.wrapperp3 .itemp3{
+min-width:55px;
+height: 110px;
+line-height: 30px;
+text-align: center;
+background-color: #ddd;
+margin:5px;
+}
 
 .mainwrapper{
     max-height: 120px;
@@ -153,6 +178,22 @@
     text-align: center;
     background-color: #ddd;
 }
+
+.product3Active {
+  /* height: '57px' !important;
+																width: '60px' !important; */
+																border-radius: 50%;
+                                margin: 6px;
+                                border: 1px solid black;
+}
+
+.product3Normal {
+  /* height: '67px' !important;
+																width: '70px' !important; */
+																border-radius: 50%;
+                                margin: 6px;
+                                border: 1px solid white;
+}
 .cartButton{
     height: 48px;
     width: 180px;
@@ -174,11 +215,13 @@
     justify-content: center;
     align-items: center;
     margin-right: 2px;
+    margin-bottom: 9px ;
     background-color: white;
 }
 .cartDiv{
     display: flex;
     position: fixed;
+    margin-bottom: 6px ;
 
 }
 
@@ -190,60 +233,12 @@
 	border: '2px solid black'
 }
 
-/* @media screen and (min-width: 760px) {
-  .marginTopFloat {
-    margin-top: '140%';
-  }
-} */
-/* @media screen and (min-width: 768px) {
-      .marginTopFloat {
-          margin-top: 30%;
-      }
-  } */
-
-  @media screen and (min-width: 768px) {
-    .marginTopFloat {
-        margin-top: 30%;
-    }
+.description{
+  margin-bottom: 120px;
 }
-@media only screen 
-    and (device-width : 375px) 
-    and (device-height : 812px) 
-    and (-webkit-device-pixel-ratio : 3) {
-      .marginTopFloat{
-        margin-top: 140%;
-      }
-     }
 
-     @media screen and (min-width: 768px) {
-      .marginTopFloat2 {
-          margin-top: 35%;
-      }
-  }
 
-     @media only screen 
-    and (device-width : 375px) 
-    and (device-height : 812px) 
-    and (-webkit-device-pixel-ratio : 3) {
-      .marginTopFloat2{
-        margin-top: 152%;
-      }
-     }
 
-     @media screen and (min-width: 768px) {
-      .marginTopFloat2 {
-          margin-top: 35%;
-      }
-  }
-
-     @media only screen 
-     and (device-width : 375px) 
-     and (device-height : 812px) 
-     and (-webkit-device-pixel-ratio : 3) {
-       .marginTopFloat2{
-         margin-top: 110%;
-       }
-      }
 
   
 
