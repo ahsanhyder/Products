@@ -215,7 +215,7 @@ export default function Product3({ data }) {
 						</div>
 					</div>
 				</div>
-				<div style={{paddingTop:"580px"}}>
+				<div style={{paddingTop:"550px"}}>
 					<div className="container-fluid mx-2 mb-4 mt-4">
 						{products &&
 							products.map((ele) => {
@@ -414,7 +414,7 @@ export default function Product3({ data }) {
 							</span>
 						</div>
 					</div>
-					<div className={`container-fluid mx-2 ${styles.description}`}>
+					<div className={`container-fluid mx-2 ${styles.description3}`}>
 						<div className="row">
 							<div className="col">
 								<h6 className={styles.headingMain}>PRODUCT DESCRIPTION</h6>

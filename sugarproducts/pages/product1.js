@@ -173,7 +173,7 @@ export default function Product1({ data }) {
 					</div>
 				</div>
 				</div>
-				<div style={{paddingTop:"580px"}}>
+				<div style={{paddingTop:"525px"}}>
 					<div className="container-fluid mx-2">
 						<div className="row">
 							<div class="col">
@@ -311,7 +311,7 @@ export default function Product1({ data }) {
 							</div>
 						</div>
 					</div>
-					<div className={`container-fluid mx-2 ${styles.description}`}>
+					<div className={`container-fluid mx-2 ${styles.description1}`}>
 						<div className="row">
 							<div className="col">
 								<h6 className={styles.headingMain}>PRODUCT DESCRIPTION</h6>

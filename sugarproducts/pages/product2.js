@@ -197,7 +197,7 @@ export default function product3({ data }) {
                     </div>
                 </div>
                 <div>
-                <div style={{paddingTop:"580px"}}>
+                <div style={{paddingTop:"555px"}}>
                     <div className={styles.wrapper3}>
                         {variant &&
                             variant.map((ele) => {
@@ -316,7 +316,7 @@ export default function product3({ data }) {
                             })}
                     </div>
  
-                    <div className="container-fluid mx-2">
+                    <div className="container-fluid mx-2 mt-3">
                         <div className="row">
                             <div className="col">
                                 <h6 className={styles.headingMain}>AVAILABLE OFFERS</h6>
@@ -446,7 +446,7 @@ export default function product3({ data }) {
               </div>
             </div>
           </div>
-                    <div className={`container-fluid mx-2 ${styles.description}`}>
+                    <div className={`container-fluid mx-2 ${styles.description2}`}>
                         <div className="row">
                             <div className="col">
                                 <h6 className={styles.headingMain}>PRODUCT DESCRIPTION</h6>
@@ -475,7 +475,7 @@ export default function product3({ data }) {
                 </div>
                 {productData &&
                 productData.resbody.youtube_id && (
-                    <div className="container mt-3">
+                    <div className="container mt-1">
                         <div className="">
                             <iframe
                                 className="bye"
