@@ -5,7 +5,7 @@ import { Button, Modal } from 'react-bootstrap';
 import Carousel from 'react-bootstrap/Carousel';
 import axios from 'axios';
 import Truncate from 'react-truncate';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import ProductNavbar from './ProductNavbar'
 
 
@@ -168,25 +168,25 @@ export default function Product3({ data }) {
 				</Head>
 			</div> */}
 			<div style={{ overflowX: 'hidden' }}>
-				<div className="fixed-top mt-5" style={{ backgroundColor: 'white' }}>
+				<div className="fixed-top mt-5" style={{ backgroundColor: 'white', height:"430px" }}>
 					<div className={`container-fluid mt-3 mb-3 ${styles.sticky}`}>
 					<div className="mb-5">
                     <ProductNavbar title={productData && productData.resbody.title}/>
                     </div>
                     <div className="mt-5"></div>
 						<div className="row mt-5">
-							<div className="col-1 col-sm-3 col-md-4 col-lg-5 " />
-							<div className="col-10 col-sm-7 col-md-4 col-lg-2">
+							<div className="col-2 col-sm-3 col-md-4 col-lg-5 " />
+							<div className="col-8 col-sm-7 col-md-4 col-lg-2">
 								<Carousel controls={false}>
 									{imgData &&
 										imgData.map((ele) => (
 											<Carousel.Item>
-												<img className="d-block w-100" height="350px" src={ele} alt="First slide" />
+												<img className="d-block w-80" height="280px" src={ele} alt="First slide" />
 											</Carousel.Item>
 										))}
 								</Carousel>
 							</div>
-							<div className="col-1 col-sm-2 col-md-4 col-lg-5" />
+							<div className="col-2 col-sm-2 col-md-4 col-lg-5" />
 						</div>
 					</div>
 
@@ -215,7 +215,7 @@ export default function Product3({ data }) {
 						</div>
 					</div>
 				</div>
-				<div style={{paddingTop:"550px"}}>
+				<div style={{paddingTop:"467px"}}>
 					<div className="container-fluid mx-2 mb-4 mt-4">
 						{products &&
 							products.map((ele) => {
@@ -268,8 +268,8 @@ export default function Product3({ data }) {
 															className={`${styles.itemp3}    `}
 															style={{
 																'background-color': `${elem.hexCode}`,
-																height: '55px',
-																width: '45px',
+																height: '45px',
+																// width: '25px',
 																// margin: '4px',
 																marginLeft: '4px',
 																marginTop: '5px',
@@ -304,7 +304,7 @@ export default function Product3({ data }) {
 								lines={!expand && 3}
 								ellipsis={
 									<span className={styles.readmore} onClick={handleToggle}>
-										<strong>+ more </strong>
+										<strong  style={{color: '#DB7093', paddingLeft:"15px"}}>+ more </strong>
 									</span>
 								}
 								onTruncate={handletruncate}
@@ -333,7 +333,7 @@ export default function Product3({ data }) {
 							{!truncate &&
 							expand && (
 								<span className={styles.readmore} onClick={handleToggle}>
-									<strong> - less</strong>
+									<strong style={{color: '#DB7093'}}> - less</strong>
 								</span>
 							)}
 						</div>
@@ -344,7 +344,7 @@ export default function Product3({ data }) {
 							className={`container-fluid col-10 col-sm-8 col-md-4 col-lg-4 fixed-bottom ${styles.cartDiv}`}
 						>
 							<div className={styles.likeIcon}>
-								<FavoriteBorderIcon style={{ fontSize: 45 }} />
+								<FavoriteBorderRoundedIcon style={{ fontSize: 45 }} />
 							</div>
 							<div className={styles.cartButton} onClick={handleCart}>
 								ADD TO CART
@@ -359,7 +359,7 @@ export default function Product3({ data }) {
 								Delivery Details
 							</span>
 						</div>
-						<div className="mx-4 mt-2 mb-2">
+						<div className="d-flex justify-content-around">
 							<span className="">
 								<input
 									className="text-center"
@@ -369,7 +369,8 @@ export default function Product3({ data }) {
 										outline: 'none',
 										border: 'none',
 										borderBottom: '1px solid black',
-										fontSize: 'medium'
+										fontSize: 'medium',
+										width:"110px",
 									}}
 									onChange={handleChange}
 								/>
@@ -424,7 +425,7 @@ export default function Product3({ data }) {
 							lines={!rmore && 5}
 							ellipsis={
 								<span className={styles.readmore} onClick={handlermore}>
-									<strong>...Read more</strong>
+									<strong  style={{color: '#DB7093', paddingLeft:"15px"}}>...Read more</strong>
 								</span>
 							}
 							onTruncate={handlertruncate}
@@ -436,7 +437,7 @@ export default function Product3({ data }) {
 						{!rtruncate &&
 						rmore && (
 							<span className={styles.readmore} onClick={handlermore}>
-								<strong>Show less</strong>
+								<strong style={{color: '#DB7093', paddingLeft:"15px"}}>Show less</strong>
 							</span>
 						)}
 					</div>

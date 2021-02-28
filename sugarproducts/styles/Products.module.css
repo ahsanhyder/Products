@@ -120,8 +120,8 @@
   } 
 
 .wrapper3 .item3{
-    min-width:60px;
-    height: 110px;
+    min-width:45px;
+    /* height: 110px; */
     line-height: 30px;
     text-align: center;
     background-color: #ddd;
@@ -146,7 +146,7 @@
 } 
 
 .wrapperp3 .itemp3{
-min-width:55px;
+min-width:45px;
 height: 110px;
 line-height: 30px;
 text-align: center;
@@ -244,6 +244,7 @@ margin:5px;
 .description3{
   margin-bottom: 100px;
 }
+
 
 
 
