@@ -6,11 +6,20 @@ import Carousel from 'react-bootstrap/Carousel';
 import axios from 'axios';
 import Truncate from 'react-truncate';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
+import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import ProductNavbar from './ProductNavbar'
+import { useRouter } from 'next/router'
+import Router from "next/router"
+import GradeRoundedIcon from '@material-ui/icons/GradeRounded';
+import GradeOutlinedIcon from '@material-ui/icons/GradeOutlined';
+import GradeTwoToneIcon from '@material-ui/icons/GradeTwoTone';
+import shadows from '@material-ui/core/styles/shadows';
+
 
 
 export default function Product1({ data }) {
 	console.log('product1');
+	const router = useRouter()
 	const [ expand, setexpand ] = useState(false);
 	const [ rmore, setrmore ] = useState(false);
 	const [ truncate, settruncate ] = useState(false);
@@ -115,17 +124,82 @@ export default function Product1({ data }) {
 		createRef.current.prev();
 	};
 
+	const handleAddWishlist = (varId, prodId) =>{
+		// alert("Added to wishlist !")
+		console.log(varId, prodId);
+		var data = {
+			moveToWishlist:0,
+			product_id:prodId,
+			variant_id:varId,
+			customer_id:3449846562899
+		};
+		
+		var config = {
+		  method: 'post',
+		  url: 'https://prod.api.sugarcosmetics.com/wishlist/prod/addWishlist',
+		  headers: { 
+			'Authorization': ' aCsf4laORaLOw3J1lBPVUjQn6EqfNcYg', 
+			'Content-Type': 'application/json'
+		  },
+		  data : data
+		};
+		
+		axios(config)
+		.then(function (response) {
+			console.log("wishresponse",response)
+		  console.log(response.data);
+		  if(response.data.statusId==1){
+			  router.reload()
+		  }
+		  return response.data
+		})
+		.catch(function (error) {
+		  console.log(error);
+		});
+		
+	}
+
+	const handleRemoveWishlist = (varId, prodId) =>{
+		console.log(varId, prodId);
+		var data = {
+			moveToWishlist:0,
+			product_id:prodId,
+			variant_id:varId,
+			customer_id:3449846562899
+		};
+
+var config = {
+  method: 'post',
+  url: 'https://prod.api.sugarcosmetics.com/wishlist/prod/removeWishlist',
+  headers: { 
+    'Content-Type': 'application/json'
+  },
+  data : data
+};
+
+axios(config)
+.then(function (response) {
+		router.reload();
+	
+  return response.data;
+})
+.catch(function (error) {
+  console.log(error);
+});
+
+	}
+
 	return (
 		<div>
 			<div style={{ overflowX: 'hidden' }}>
 				<div>
-				<div className="fixed-top" style={{ backgroundColor: 'white',height:"412px" }}>
+				<div className="fixed-top" style={{ backgroundColor: 'white',height:"420px"}}>
 					<div className="container-fluid mt-3 mb-3">
 					<div className="mb-5">
                     <ProductNavbar title={productData && productData.resbody.title}/>
                     </div>
 					<div className="mt-5"></div>						
-					<div className="row" >
+					<div className="row" style={{ marginTop:"15px"}}>
 							<div className="col-2 col-sm-3 col-md-4 " />
 							<div className="col-8 col-sm-7 col-md-4">
 								<Carousel
@@ -135,6 +209,7 @@ export default function Product1({ data }) {
 									controls={false}
 									indicators={true}
 									interval={3500}
+									style={{paddingTop:"15px",padding:"15px"}}
 								>
 									{imgData &&
 										imgData.map((ele) => (
@@ -143,6 +218,12 @@ export default function Product1({ data }) {
 											</Carousel.Item>
 										))}
 								</Carousel>
+								{
+                                   productData && productData.resbody.rating!=null? <div className="fixedBottom d-flex align-items-center shadow-sm" style={{height:"40px",width:"auto",borderRadius:"20px 20px 20px 20px",marginTop:"-85px",marginLeft:"-35px",zIndex:"2",backgroundColor:"white",position:"absolute"}}>
+                                   <span><img src="../star_filled.png" alt="Rating star" style={{height:"25px",marginRight:"15px",marginLeft:"15px"}}/></span>
+                                   <span><small className="text-muted" style={{fontSize:"15px",marginRight:"15px"}}>{`${(productData && productData.resbody.rating.average).toFixed(1)}`} ({productData && productData.resbody.rating.count})</small></span>
+                               </div>:<div></div>
+                                }
 							</div>
 							<div className="col-2 col-sm-2 col-md-4" />
 						</div>
@@ -150,7 +231,7 @@ export default function Product1({ data }) {
 
 					<div className="container-fluid">
 						<div className="row">
-							<div className="col text-center">
+							<div className="col text-center" style={{marginTop:"-20px"}}>
 								<p className={styles.productTitle}>{productData && productData.resbody.title}</p>
 							</div>
 						</div>
@@ -160,7 +241,7 @@ export default function Product1({ data }) {
 									{compare_at_price && `Rs. ${compare_at_price}`}
 								</h5>
 							</div>
-							<div className="col text-center">
+							<div className="col text-center" style={{marginTop:"-15px"}}>
 								<p className={styles.productTitle}>Rs. {price}</p>
 							</div>
 							<div className="col">
@@ -174,7 +255,7 @@ export default function Product1({ data }) {
 					</div>
 				</div>
 				</div>
-				<div style={{paddingTop:"445px"}}>
+				<div style={{paddingTop:"435px"}}>
 					<div className="container-fluid mx-2">
 						<div className="row">
 							<div class="col">
@@ -226,9 +307,30 @@ export default function Product1({ data }) {
 						<div
 							className={`container-fluid col-10 col-sm-8 col-md-4 col-lg-4 fixed-bottom ${styles.cartDiv}`}
 						>
-							<div className={styles.likeIcon}>
-								<FavoriteBorderRoundedIcon style={{ fontSize: 45 }} />
-							</div>
+					{console.log("qqq",productData,productData.resbody.variants[0].isWishlisted)}
+							{
+								productData && productData.resbody.variants[0].isWishlisted==false?
+								
+									<div className={styles.likeIcon}>
+										<FavoriteBorderRoundedIcon style={{ fontSize: 45 }} onClick={()=>handleAddWishlist(
+									productData && productData.resbody.variants[0].id,
+										productData && productData.resbody.id)} />
+									</div>
+								:
+								
+								<div className={styles.likeIcon}>
+									<FavoriteRoundedIcon style={{ fontSize: 45 }} onClick={()=>handleRemoveWishlist(
+										productData && productData.resbody.variants[0].id,
+									productData && productData.resbody.id)} />
+								</div>
+							
+							}
+
+							{/* <div className={styles.likeIcon}>
+								<FavoriteBorderRoundedIcon style={{ fontSize: 45 }} onClick={()=>handleAddWishlist(
+									productData && productData.resbody.variants[0].id,
+										productData && productData.resbody.id)} />
+							</div> */}
 							<div
 								className={styles.cartButton}
 								onClick={handleCart}
@@ -250,11 +352,12 @@ export default function Product1({ data }) {
 								Delivery Details
 							</span>
 						</div>
-						<div className="d-flex justify-content-around">
+						<div className="d-flex ">
 							<span className="">
 								<input
 									className="text-center"
 									type="text"
+									maxlength="6"
 									placeholder="Enter Pincode"
 									style={{
 										outline: 'none',
@@ -278,7 +381,7 @@ export default function Product1({ data }) {
 						<h6 className="mt-3">{deliveryData.message}</h6>
 					</div>
 
-					<div
+					{/* <div
 						className="my-2 mx-1"
 						style={{
 							fontSize: '12px'
@@ -312,7 +415,7 @@ export default function Product1({ data }) {
 								</span>
 							</div>
 						</div>
-					</div>
+					</div> */}
 					<div className={`container-fluid mx-2 ${styles.description1}`}>
 						<div className="row">
 							<div className="col">
@@ -341,7 +444,7 @@ export default function Product1({ data }) {
 					</div>
 					{productData &&
 					productData.resbody.youtube_id && (
-						<div className="container mt-1" style={{ marginBottom: '110px' }}>
+						<div className="container mt-1" style={{ marginBottom: '15px' }}>
 							<div className="">
 								<iframe
 									className="bye"
@@ -355,6 +458,45 @@ export default function Product1({ data }) {
 							</div>
 						</div>
 					)}
+
+<div
+						className="my-2 mx-1"
+						style={{
+							fontSize: '12px'
+						}}
+					>
+						<div style={{ border: '1px solid black',marginBottom: '10px' }} className="d-flex justify-content-between py-3 px-1">
+							<div>
+								<span className="px-1">
+									<img src="/Cruelty_Free.png" width="23" alt="Cruelty Free img" />
+								</span>
+								<span>
+									<span className="" style={{ fontWeight: 'bold' }}>
+										Cruelty Free
+									</span>
+								</span>
+							</div>
+							<div>
+								<span className="px-1">
+									<img src="/Quality_First.png" width="23" alt="Quality First img" />
+								</span>
+								<span className="" style={{ fontWeight: 'bold' }}>
+									<span>Quality First</span>
+								</span>
+							</div>
+							<div>
+								<span className="px-1">
+									<img className src="/Easy_Returns.png" width="23" alt="Easy Returns img" />
+								</span>
+								<span>
+									<span style={{ fontWeight: 'bold' }}>Easy Return policy</span>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div style={{display:"flex",justifyContent:"center",alignItems:"center",marginBottom: '110px'}}>
+					<small style={{fontWeight:"bold", color:'#DB7093'}}>~Rule the world, one look at a time~</small>
 				</div>
 			</div>
 		</div>

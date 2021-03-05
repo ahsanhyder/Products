@@ -20,7 +20,7 @@ export default function Handleproduct({ data }) {
 Handleproduct.getInitialProps = async (req) => {
 	var config = {
 		method: 'get',
-		url: `https://qa.api.sugarcosmetics.com/products/qa/getProductsv2?handle=${req.query.product}`,
+		url: `https://qa.api.sugarcosmetics.com/products/qa/getProductsv2?handle=${req.query.product}&customerId=3449846562899`,
 		headers: {}
 	};
 
