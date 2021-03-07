@@ -32,6 +32,7 @@ export default function Product4({ data }) {
     const [ selectPrice, setselectPrice ] = useState(productData && productData.resbody.variants);
     const [ changeTitle, setchangeTitle ] = useState(productData && productData.resbody.variants[0].title);
     const [ pinchange, setpinchange ] = useState('');
+    const [tags, setTags] = useState(productData && productData.resbody.tags.split(","))
     const [ deliveryData, setDeliveryData ] = useState({});
     const [ show, setShow ] = useState(false);
     const handleClose = () => setShow(false);
@@ -174,6 +175,11 @@ axios(config)
 });
 
 	}
+    
+    var arr=["bestseller", "new", "offer", "trending", "featured", "only few left","sold out", "viewer's choice", "selling like hot cakes"]
+	var imgtags= tags.filter((tag)=>arr.includes(tag.trim().toLowerCase()))
+	imgtags=imgtags.map((ele2)=>ele2.trim())
+
     return (
         <div>
         
@@ -183,6 +189,20 @@ axios(config)
                     <ProductNavbar title={productData && productData.resbody.title}/>
                     </div>
                     <div className="mt-5"></div> 
+                    <div className="fixed-top" style={{marginTop:"70px"}}>
+                                {
+                                    imgtags.map((elem2)=>{
+                                        return(
+                                            <div className="img-fluid d-block">
+                                                <div className="pb-1">
+                                                    {/* <img src="/Bestseller.png"  /> */}
+                                                    <img src={`/${elem2[0].toUpperCase()}${elem2.slice(1)}.png`}  style={{height:"21px"}} />
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
                         <div className="row" style={{paddingBottom:"10px",paddingTop:"15px",marginTop:"-36px"}}>
                             <div className="col-1 col-sm-3 col-md-4  " />
                             <div className="col-10 col-sm-7 col-md-4 col-lg-4">

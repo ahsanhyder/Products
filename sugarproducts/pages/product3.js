@@ -33,6 +33,7 @@ export default function Product3({ data }) {
 	const [ productTitle, setproductTitle ] = useState('');
 	const [ sugarOptionsTitle, setsugarOptionsTitle ] = useState(productData && productData.resbody.sugar_options);
 	const [ activeVariant, setactiveVariant ] = useState(null);
+	const [tags, setTags] = useState(productData && productData.resbody.tags.split(","))
 
 	const [ show, setShow ] = useState(false);
 	const [ active, setactive ] = useState(false);
@@ -228,6 +229,9 @@ axios(config)
 
 	}
 
+	var arr=["bestseller", "new", "offer", "trending", "featured", "only few left","sold out", "viewer's choice", "selling like hot cakes"]
+	var imgtags= tags.filter((tag)=>arr.includes(tag.trim().toLowerCase()))
+	imgtags=imgtags.map((ele2)=>ele2.trim())
 
 	return (
 		<div>
@@ -245,6 +249,20 @@ axios(config)
                     </div>
                     <div className="mt-5"></div>
 						<div className="row mt-5">
+						<div className="fixed-top" style={{marginTop:"70px"}}>
+                                {
+                                    imgtags.map((elem2)=>{
+                                        return(
+                                            <div className="img-fluid d-block">
+                                                <div className="pb-1">
+                                                    {/* <img src="/Bestseller.png"  /> */}
+                                                    <img src={`/${elem2[0].toUpperCase()}${elem2.slice(1)}.png`}  style={{height:"19px"}} />
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
 							<div className="col-2 col-sm-3 col-md-4 col-lg-5 " />
 							<div className="col-8 col-sm-7 col-md-4 col-lg-2">
 								<Carousel controls={false} style={{paddingTop:"15px",padding:"15px"}}>
@@ -538,6 +556,10 @@ axios(config)
 				</div>
 				{productData &&
 				productData.resbody.youtube_id && (
+					<>
+					<div className="container-fluid">
+							<h6 style={{fontWeight:"bold"}}>ALSO WATCH</h6>
+						</div>
 					<div className="container mt-3" style={{ marginBottom: '80px' }}>
 						<div className="">
 							<iframe
@@ -551,6 +573,7 @@ axios(config)
 							/>
 						</div>
 					</div>
+					</>
 				)}
 				<div
 						className="my-2 mx-1"

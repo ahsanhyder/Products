@@ -33,6 +33,7 @@ export default function Product1({ data }) {
 	const [ offerText, setofferText ] = useState(productData && productData.resbody.variants[0].offers);
 	const [ pinchange, setpinchange ] = useState('');
 	const [ deliveryData, setDeliveryData ] = useState({});
+	const [tags, setTags] = useState(productData && productData.resbody.tags.split(","))
 
 	const [ show, setShow ] = useState(false);
 
@@ -188,7 +189,9 @@ axios(config)
 });
 
 	}
-
+	var arr=["bestseller", "new", "offer", "trending", "featured", "only few left","sold out", "viewer's choice", "selling like hot cakes"]
+	var imgtags= tags.filter((tag)=>arr.includes(tag.trim().toLowerCase()))
+	imgtags=imgtags.map((ele2)=>ele2.trim())
 	return (
 		<div>
 			<div style={{ overflowX: 'hidden' }}>
@@ -198,7 +201,21 @@ axios(config)
 					<div className="mb-5">
                     <ProductNavbar title={productData && productData.resbody.title}/>
                     </div>
-					<div className="mt-5"></div>						
+					<div className="mt-5"></div>
+					<div className="fixed-top" style={{marginTop:"70px"}}>
+                                {
+                                    imgtags.map((elem2)=>{
+                                        return(
+                                            <div className="img-fluid d-block">
+                                                <div className="pb-1">
+                                                    {/* <img src="/Bestseller.png"  /> */}
+                                                    <img src={`/${elem2[0].toUpperCase()}${elem2.slice(1)}.png`}  style={{height:"21px"}} />
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>						
 					<div className="row" style={{ marginTop:"15px"}}>
 							<div className="col-2 col-sm-3 col-md-4 " />
 							<div className="col-8 col-sm-7 col-md-4">
@@ -444,6 +461,10 @@ axios(config)
 					</div>
 					{productData &&
 					productData.resbody.youtube_id && (
+						<>
+						<div className="container-fluid">
+							<h6 style={{fontWeight:"bold"}}>ALSO WATCH</h6>
+						</div>
 						<div className="container mt-1" style={{ marginBottom: '15px' }}>
 							<div className="">
 								<iframe
@@ -457,6 +478,7 @@ axios(config)
 								/>
 							</div>
 						</div>
+						</>
 					)}
 
 <div

@@ -250,6 +250,37 @@ margin:5px;
 }
 
 
+.wrapperR3{
+  max-height: 120px;
+  display: flex;
+  overflow-x: auto;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  /* margin-left: 15px; */
+}
+
+.itemR3{
+    margin-right: 40px;
+}
+
+.wrapperR3::-webkit-scrollbar{
+    width: 0;
+    height: 0;
+} 
+
+.wrapperR3 .itemR3{
+  min-width:45px;
+  /* height: 110px; */
+  line-height: 30px;
+  text-align: center;
+  background-color: #ddd;
+}
+
+.descriptiont1{
+  margin-bottom: 20px;
+}
+
+
 
 
 

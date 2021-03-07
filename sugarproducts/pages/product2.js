@@ -37,6 +37,7 @@ export default function product3({ data }) {
     const [ variant, setvariant ] = useState(productData && productData.resbody.variants);
     const [ changeTitle, setchangeTitle ] = useState(productData && productData.resbody.variants[0].title);
     const [ pinchange, setpinchange ] = useState('');
+    const [tags, setTags] = useState(productData && productData.resbody.tags.split(","))
     const [ show, setShow ] = useState(false);
     const [ deliveryData, setDeliveryData ] = useState({});
     const handleClose = () => setShow(false);
@@ -200,7 +201,11 @@ axios(config)
 });
 
 	}
- 
+
+    var arr=["bestseller", "new", "offer", "trending", "featured", "only few left","sold out", "viewer's choice", "selling like hot cakes"]
+	var imgtags= tags.filter((tag)=>arr.includes(tag.trim().toLowerCase()))
+	imgtags=imgtags.map((ele2)=>ele2.trim())
+    
     return (
         <div>
             <div>
@@ -216,6 +221,20 @@ axios(config)
                     <ProductNavbar title={productData && productData.resbody.title}/>
                     </div>
                     <div className="mt-5"></div>
+                    <div className="fixed-top" style={{marginTop:"70px"}}>
+                                {
+                                    imgtags.map((elem2)=>{
+                                        return(
+                                            <div className="img-fluid d-block">
+                                                <div className="pb-1">
+                                                    {/* <img src="/Bestseller.png"  /> */}
+                                                    <img src={`/${elem2[0].toUpperCase()}${elem2.slice(1)}.png`}  style={{height:"21px"}} />
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>		
                         <div className="row" style={{paddingTop:"15px",paddingBottom:"10px"}}>
                             <div className="col-2 col-sm-3 col-md-4  col-lg-5" />
                             <div className="col-8 col-sm-7 col-md-4 col-lg-2">
@@ -276,7 +295,7 @@ axios(config)
                     </div>
                 </div>
                 <div>
-                <div style={{paddingTop:"450px"}}>
+                <div style={{paddingTop:"460px"}}>
                     <div className={styles.wrapper3}>
                         {variant &&
                             variant.map((ele) => {
@@ -365,16 +384,16 @@ axios(config)
         width: '55px',
         marginTop:"7px",
         marginLeft:"-8px",
-        borderRadius: '50%',
+        // borderRadius: '50%',
         border:"1px solid white"}}  onClick={() => titleChange(ele.title, ele.images, ele.offers,ele.id,ele.price,ele.compare_at_price)}/>:
 											 <div
                                              className={` ${styles.item3}`}
                                              style={{
                                                  'background-color': `${ele.hexCode}`,
-                                                 height: '45px',
-                                                 width: '45px',
-                                                 marginTop:"7px",
-        marginLeft:"-7px",
+                                                 height: '40px',
+                                                 width: '40px',
+                                                 marginTop:"3px",
+        marginLeft:"-8px",
                                                  borderRadius: '50%'
                                              }}
                                              onClick={() => titleChange(ele.title, ele.images, ele.offers,ele.id,ele.price,ele.compare_at_price)}
@@ -382,8 +401,8 @@ axios(config)
                                              <div
                                                  style={{
                                                      border: '1px solid white',
-                                                     width: '55px',
-                                                     marginTop: '30px',
+                                                     width: '45px',
+                                                     marginTop: '19px',
                                                      transform: 'rotate(105deg)'
                                                  }}
                                              />
@@ -574,6 +593,10 @@ axios(config)
                 </div>
                 {productData &&
                 productData.resbody.youtube_id && (
+                    <>
+                    <div className="container-fluid">
+							<h6 style={{fontWeight:"bold"}}>ALSO WATCH</h6>
+						</div>
                     <div className="container mt-1">
                         <div className="">
                             <iframe
@@ -587,6 +610,7 @@ axios(config)
                             />
                         </div>
                     </div>
+                    </>
                 )}
                 <>
                 <div
