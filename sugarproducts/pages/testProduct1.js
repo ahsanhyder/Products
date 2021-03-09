@@ -1,3 +1,4 @@
+import React from 'react'
 import Head from 'next/head';
 import { useState, useRef } from 'react';
 import styles from '../styles/Products.module.css';
@@ -15,7 +16,10 @@ import GradeOutlinedIcon from '@material-ui/icons/GradeOutlined';
 import GradeTwoToneIcon from '@material-ui/icons/GradeTwoTone';
 import shadows from '@material-ui/core/styles/shadows';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-
+import StarRatingComponent from 'react-star-rating-component';
+import Drawer from "react-bottom-drawer"
+import RemoveIcon from '@material-ui/icons/Remove';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 export default function Product1({ data }) {
 	console.log('product1');
@@ -33,11 +37,16 @@ export default function Product1({ data }) {
 	const [ offerText, setofferText ] = useState(productData && productData.resbody.variants[0].offers);
 	const [ pinchange, setpinchange ] = useState('');
 	const [ deliveryData, setDeliveryData ] = useState({});
+	const [tags, setTags] = useState(productData && productData.resbody.tags.split(","))
 
 	const [ show, setShow ] = useState(false);
 
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
+	const [isVisible, setIsVisible] = React.useState(false);
+  const openDrawer = React.useCallback(() => setIsVisible(true), []);
+  const closeDrawer = React.useCallback(() => setIsVisible(false), []);
+
 
 	// const tnc = offerText.map((ele) => ele.tnc);
 	const handleToggle = () => {
@@ -189,8 +198,42 @@ axios(config)
 
 	}
 
+	const handleNotify = (varId, prodId) => {
+var data = JSON.stringify({"email":"ahsan@sugarcosmetics.com","handle":"matte-as-hell-crayon-lipstick-minis-set","product_id":4674486206547,"product_title":"Matte As Hell Crayon Lipstick Minis Set","customer_id":3449846562899});
+
+var config = {
+  method: 'post',
+  url: 'https://prod.api.sugarcosmetics.com/notify-product/prod/notifyProduct',
+  headers: { 
+    'authorization': 'aCsf4laORaLOw3J1lBPVUjQn6EqfNcYg', 
+    'cache-control': 'no-cache', 
+    'content-type': 'application/json', 
+    'os_type': '1', 
+    'postman-token': 'd63ef29a-7c1f-6fa6-4d40-ae7b0e1e6892', 
+    'version': '55'
+  },
+  data : data
+};
+
+axios(config)
+.then(function (response) {
+	console.log("hellooooooo")
+	console.log(response.data)
+  return response.data;
+})
+.catch(function (error) {
+  console.log(error);
+});
+
+}
+
+
+	var arr=["bestseller", "new", "offer", "trending", "featured", "only few left","sold out", "viewer's choice", "selling like hot cakes"]
+	var imgtags= tags.filter((tag)=>arr.includes(tag.trim().toLowerCase()))
+	imgtags=imgtags.map((ele2)=>ele2.trim())
+
 	return (
-		<div>
+		<div style={{backgroundColor:"#E5E5E5"}}>
 			<div style={{ overflowX: 'hidden' }}>
 				<div>
 				<div className="fixed-top" style={{ backgroundColor: 'white',height:"420px"}}>
@@ -198,16 +241,21 @@ axios(config)
 					<div className="mb-5">
                     <ProductNavbar title={productData && productData.resbody.title}/>
                     </div>
-					<div className="mt-5"></div>	
-					<div style={{marginTop:"70px"}}>
-						{/* {
-							productData && productData.resbody.tags.split(",").map((elem2)=>{
-								return(
-									<div>{elem2}</div>
-								)
-							})
-						} */}
-					</div>					
+					<div className="mt-5"></div>
+					<div className="fixed-top" style={{marginTop:"70px"}}>
+                                {
+                                    imgtags.map((elem2)=>{
+                                        return(
+                                            <div className="img-fluid d-block">
+                                                <div className="pb-1">
+                                                    {/* <img src="/Bestseller.png"  /> */}
+                                                    <img src={`/${elem2[0].toUpperCase()}${elem2.slice(1)}.png`}  style={{height:"21px"}} />
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>						
 					<div className="row" style={{ marginTop:"15px"}}>
 							<div className="col-2 col-sm-3 col-md-4 " />
 							<div className="col-8 col-sm-7 col-md-4">
@@ -245,15 +293,15 @@ axios(config)
 							</div>
 						</div>
 						<div className="row">
-							<div className="col text-center">
+							<div className="col text-center" style={{marginTop:"-3px"}}>
 								<h5 className={`text-danger ${styles.linecut}`}>
 									{compare_at_price && `Rs. ${compare_at_price}`}
 								</h5>
 							</div>
-							<div className="col text-center" style={{marginTop:"-15px"}}>
+							<div className="col text-center" style={{marginTop:"-12px"}}>
 								<p className={styles.productTitle}>Rs. {price}</p>
 							</div>
-							<div className="col">
+							<div className="col" style={{marginTop:"-12px"}}>
 								{compare_at_price && (
 									<h5 className="text-danger">
 										({Math.floor((compare_at_price - price) / compare_at_price * 100)} % Off)
@@ -264,19 +312,20 @@ axios(config)
 					</div>
 				</div>
 				</div>
-				<div style={{paddingTop:"435px"}}>
-					<div className="container-fluid mx-2">
+				<div style={{paddingTop:"425px"}}>
+					<div className="container-fluid p-3 shadow" style={{backgroundColor:"white"}}>
 						<div className="row">
 							<div class="col">
 								<h6 className={styles.headingMain}>AVAILABLE OFFERS</h6>
+									
 							</div>
 						</div>
 						<div>
 							<Truncate
-								lines={!expand && 3}
+								lines={!expand && 4}
 								ellipsis={
 									<span className={styles.readmore} onClick={handleToggle}>
-										<strong style={{color: '#DB7093', paddingLeft:"15px"}}>+ more </strong>
+										<strong style={{color: '#DB7093', paddingLeft:"55px"}}>+ more </strong>
 									</span>
 								}
 								onTruncate={handletruncate}
@@ -284,28 +333,57 @@ axios(config)
 								{offerText &&
 									offerText.map((ele) => (
 										<div>
-											{ele.productOfferText}
-											<br />
+											<span>&#8211; {ele.productOfferText}</span>
 
-											<Button variant="primary" onClick={handleShow}>
+											{/* <Button variant="primary" onClick={handleShow}>
 												Know More
-											</Button>
-
-											<Modal show={show} onHide={handleClose}>
+											</Button> */}
+											
+        {/* <button className="open-btn" onClick={openDrawer}>
+          SHOW ME THE DIALOG!
+        </button> */}
+      <strong style={{textDecoration:"underline",color:"black",cursor:"pointer"}} onClick={openDrawer}> Know More&gt;</strong><br/>
+      
+	  <Drawer
+        duration={250}
+        hideScrollbars={true}
+        onClose={closeDrawer}
+        isVisible={isVisible}
+      >
+		  <div className="d-flex justify-content-between">
+		  	<div>
+			  <h4>Terms & Conditions</h4>
+			</div>
+			<div>
+				<CancelIcon style={{height:"35px"}} onClick={closeDrawer}/>
+			</div>
+		  </div>
+		  <div style={{paddingBottom:"250px"}}>
+		  {ele.tnc}
+		  </div>
+      </Drawer>
+											{/* <span><strong style={{textDecoration:"underline"}}> Know More</strong></span><br/> */}
+										{/* <Drawer
+											isVisible={true}
+											onClose={true}
+											>
+											{ele.tnc}
+										</Drawer> */}
+											{/* <Modal show={show} onHide={handleClose}>
 												<Modal.Header closeButton>
 													<Modal.Title> Terms & Conditions</Modal.Title>
 												</Modal.Header>
 												<Modal.Body>
 													<p>{ele.tnc}</p>
 												</Modal.Body>
-											</Modal>
+											</Modal> */}
 										</div>
 									))}
 							</Truncate>
 							{!truncate &&
 							expand && (
 								<span className={styles.readmore} onClick={handleToggle}>
-									<strong style={{color: '#DB7093'}}> - less</strong>
+									<strong style={{color: '#DB7093',paddingLeft:"285px"}}> - less</strong>
 								</span>
 							)}
 						</div>
@@ -335,12 +413,17 @@ axios(config)
 							
 							}
 
-							{/* <div className={styles.likeIcon}>
-								<FavoriteBorderRoundedIcon style={{ fontSize: 45 }} onClick={()=>handleAddWishlist(
-									productData && productData.resbody.variants[0].id,
-										productData && productData.resbody.id)} />
-							</div> */}
-							<div
+							{
+								productData && productData.resbody.variants[0].inventory_quantity==0?<div
+								className={styles.cartButton2}
+								onClick={() =>
+									handleNotify(
+										productData && productData.resbody.variants[0].id,
+										productData && productData.resbody.id
+									)}
+							>
+								NOTIFY ME
+							</div>:<div
 								className={styles.cartButton}
 								onClick={handleCart}
 								onClick={() =>
@@ -351,11 +434,12 @@ axios(config)
 							>
 								ADD TO CART
 							</div>
+							}
 						</div>
 						<div className="col-1 col-sm-2 col-md-4 col-lg-4 " />
 					</div>
 
-					<div className="container-fluid mx-1 mt-4 mb-4">
+					<div className="container-fluid mt-1 mb-1 p-3 shadow" style={{backgroundColor:"white"}}>
 						<div className="my-2">
 							<span className="px-1" style={{ fontWeight: 'bold' }}>
 								Delivery Details
@@ -386,52 +470,15 @@ axios(config)
 								CHECK
 							</span>
 						</div>
-						{/* {pinchange.length<6?<h6 className="mt-3">{deliveryData.message}</h6>} */}
 						<h6 className="mt-3">{deliveryData.message}</h6>
 					</div>
 
-					{/* <div
-						className="my-2 mx-1"
-						style={{
-							fontSize: '12px'
-						}}
-					>
-						<div style={{ border: '1px solid black' }} className="d-flex justify-content-between py-3 px-1">
-							<div>
-								<span className="px-1">
-									<img src="/Cruelty_Free.png" width="23" alt="Cruelty Free img" />
-								</span>
-								<span>
-									<span className="" style={{ fontWeight: 'bold' }}>
-										Cruelty Free
-									</span>
-								</span>
-							</div>
-							<div>
-								<span className="px-1">
-									<img src="/Quality_First.png" width="23" alt="Quality First img" />
-								</span>
-								<span className="" style={{ fontWeight: 'bold' }}>
-									<span>Quality First</span>
-								</span>
-							</div>
-							<div>
-								<span className="px-1">
-									<img className src="/Easy_Returns.png" width="23" alt="Easy Returns img" />
-								</span>
-								<span>
-									<span style={{ fontWeight: 'bold' }}>Easy Return policy</span>
-								</span>
-							</div>
-						</div>
-					</div> */}
-					<div className={`container-fluid mx-2 ${styles.descriptiont1}`}>
+					
+					<div className={`container-fluid p-3 shadow ${styles.description1}`}>
 						<div className="row">
 							<div className="col">
 								<h6 className={styles.headingMain}>PRODUCT DESCRIPTION</h6>
 							</div>
-							
-							
 						</div>
 						<Truncate
 							lines={!rmore && 5}
@@ -453,77 +500,12 @@ axios(config)
 							</span>
 						)}
 					</div>
-					<div className="container-fluid ">
-						<div className="d-flex justify-content-between mb-2">
-							<div>
-								<h6 style={{fontWeight:"bold"}}>RATINGS AND REVIEWS</h6>
-							</div>
-							<div>
-								<AddCircleOutlineIcon style={{height:"32px",marginTop:"-5px",color: '#DB7093'}}/>
-							</div>
-						</div>
-							{/* {
-								productData && productData.resbody.rating.reviews.map((elem1)=>{
-									{var date = new Date(elem1.createdAt).toString().substring(0,15)}
-									return(
-										<div className="card shadow-sm">
-
-										<div className="d-flex justify-content-around mx-1 my-4">
-												<div style={{height:"65px",width:"65px",border:"1px solid black",borderRadius:"50%"}}></div>
-				
-												<div>
-													<p className="card-text mx-1"><small class="text-success">{elem1.first_name} {elem1.last_name}</small></p>
-													<img src="/star_filled.png" style={{height:"30px"}}/>
-												</div>
-												<div>
-													<p class="card-text"><small class="text-muted">{date}</small></p>
-												</div>  
-											</div>
-										</div>
-									)
-								})
-							} */}
-
-<Truncate
-							lines={!rmore && 5}
-							ellipsis={
-								<span className={styles.readmore} onClick={handlermore}>
-									<strong style={{color: '#DB7093', paddingLeft:"15px"}}>...Read more</strong>
-								</span>
-							}
-							onTruncate={handlertruncate}
-						>
-							<div
-								dangerouslySetInnerHTML={{ __html: [ productData && productData.resbody.rating.reviews] }}
-							/>
-						</Truncate>
-						{!rtruncate &&
-						rmore && (
-							<span className={styles.readmore} onClick={handlermore}>
-								<strong style={{color: '#DB7093', paddingLeft:"15px"}}>Show less</strong>
-							</span>
-						)}
-						
-						{/* <div className="card shadow-sm">
-
-						<div className="d-flex justify-content-around mx-1 my-4">
-								<div style={{height:"65px",width:"65px",border:"1px solid black",borderRadius:"50%"}}></div>
-
-								<div>
-									<span><p className="card-text mx-1">Puja Saw</p></span>
-									<span><img src="/star_filled.png" style={{height:"30px"}}/></span>
-								</div>
-								<div>
-									<p class="card-text">Fri 05 Mar 2021</p>
-								</div>  
-							</div>
-						</div> */}
-					</div>
+					
 					{productData &&
 					productData.resbody.youtube_id && (
-						<>
+						<div className="p-2  mt-1 shadow" style={{backgroundColor:"white"}}>
 						<div className="container-fluid">
-							<h6 style={{fontWeight:"bold"}}>ALSO WATCH</h6>
+							<h6 className="mt-2" style={{fontWeight:"bold"}}>ALSO WATCH</h6>
 						</div>
 						<div className="container mt-1" style={{ marginBottom: '15px' }}>
 							<div className="">
@@ -538,16 +520,16 @@ axios(config)
 								/>
 							</div>
 						</div>
-						</>
+						</div>
 					)}
 
 <div
-						className="my-2 mx-1"
+						className="mt-1"
 						style={{
 							fontSize: '12px'
 						}}
 					>
-						<div style={{ border: '1px solid black',marginBottom: '10px' }} className="d-flex justify-content-between py-3 px-1">
+						<div style={{ border: '',marginBottom: '10px',backgroundColor:"white" }} className="d-flex justify-content-between py-4 px-1 shadow">
 							<div>
 								<span className="px-1">
 									<img src="/Cruelty_Free.png" width="23" alt="Cruelty Free img" />
@@ -578,7 +560,7 @@ axios(config)
 					</div>
 				</div>
 				<div style={{display:"flex",justifyContent:"center",alignItems:"center",marginBottom: '110px'}}>
-					<small style={{fontWeight:"bold", color:'#DB7093'}}>~Rule the world, one look at a time~</small>
+					<small className="mt-2" style={{fontWeight:"bold", color:'#DB7093'}}>~Rule the world, one look at a time~</small>
 				</div>
 			</div>
 		</div>
