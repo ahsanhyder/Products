@@ -21,6 +21,8 @@ import CancelIcon from '@material-ui/icons/Cancel';
 export default function Product3({ data }) {
 	console.log('product2');
 	const router = useRouter()
+	const [numOffers, setNumOffers] = useState(1)
+	const [ismore, setIsMore] = useState(false)
 	const [ cartVariants, setcartVariants ] = useState([]);
 	const [ expand, setexpand ] = useState(false);
 	const [ rmore, setrmore ] = useState(false);
@@ -123,14 +125,14 @@ export default function Product3({ data }) {
 				variant_id: productData.resbody.variants[0].id,
 				sugar_product_type: 2,
 				quantity: 1,
-				customer_id: 3201015742547
+				customer_id: 3449846562899
 			};
 			console.log(data);
 			var config = {
 				method: 'post',
 				url: 'https://qa.api.sugarcosmetics.com/cart/qa/addItemToCartV2',
 				headers: {
-					Authorization: 'rXPinYygMxB8ze5XaKt1kmLtN5vEcQ7B'
+					Authorization: 'aCsf4laORaLOw3J1lBPVUjQn6EqfNcYg'
 				},
 				data: data
 			};
@@ -270,7 +272,17 @@ axios(config)
 	var arr=["bestseller", "new", "offer", "trending", "featured", "only few left","sold out", "viewer's choice", "selling like hot cakes"]
 	var imgtags= tags.filter((tag)=>arr.includes(tag.trim().toLowerCase()))
 	imgtags=imgtags.map((ele2)=>ele2.trim())
-
+	const handleOffers = (test) =>{
+		if(test == 'more'){
+			setNumOffers(offerText.length-1)
+			setIsMore(!ismore)
+		}
+		else{
+			setNumOffers(1)
+			setIsMore(!ismore)
+	
+		}
+	}
 	return (
 		<div  style={{backgroundColor:"#E5E5E5"}}>
 			{/* <div>
@@ -425,14 +437,15 @@ axios(config)
 							})}
 					</div>
 
-					<div className="container-fluid  p-3 shadow" style={{backgroundColor:"white"}}>
+					<>
+					<div className="container-fluid p-3 shadow" style={{backgroundColor:"white"}}>
 						<div className="row">
-							<div className="col">
+							<div class="col">
 								<h6 className={styles.headingMain}>AVAILABLE OFFERS</h6>
 							</div>
 						</div>
 						<div>
-						<Truncate
+							{/* <Truncate
 								lines={!expand && 4}
 								ellipsis={
 									<span className={styles.readmore} onClick={handleToggle}>
@@ -452,6 +465,7 @@ axios(config)
         hideScrollbars={true}
         onClose={closeDrawer}
         isVisible={isVisible}
+		style={{opacity:"0.5"}}
       >
 		  <>
 		  <div className="d-flex justify-content-between">
@@ -462,7 +476,7 @@ axios(config)
 				<CancelIcon style={{height:"35px"}} onClick={closeDrawer}/>
 			</div>
 		  </div>
-		  <div style={{paddingBottom:"250px"}}>
+		  <div style={{paddingBottom:"270px"}}>
 		  {ele.tnc}
 		  </div>
 		  </>
@@ -475,9 +489,60 @@ axios(config)
 								<span className={styles.readmore} onClick={handleToggle}>
 									<strong style={{color: '#DB7093',paddingLeft:"285px"}}> - less</strong>
 								</span>
-							)}
+							)} */}
+{
+	offerText &&
+	offerText.map((ele,ind)=>{
+		return(
+			<>
+			{
+ind<=numOffers &&<>
+<div>&#8211; {ele.productOfferText}
+
+<strong style={{textDecoration:"underline",color:"black",cursor:"pointer"}} onClick={openDrawer}> Know More&gt;</strong>
+
+</div>
+</>
+			}
+			{/* <div>&#8211; {ele.productOfferText}
+
+			<strong style={{textDecoration:"underline",color:"black",cursor:"pointer"}} onClick={openDrawer}> Know More&gt;</strong>
+
+			</div> */}
+			<Drawer
+        duration={250}
+        hideScrollbars={true}
+        onClose={closeDrawer}
+        isVisible={isVisible}
+		style={{opacity:"0.5"}}
+      >
+		  <>
+		  <div className="d-flex justify-content-between">
+		  	<div>
+			  <h4>Terms & Conditions</h4>
+			</div>
+			<div>
+				<CancelIcon style={{height:"35px"}} onClick={closeDrawer}/>
+			</div>
+		  </div>
+		  <div style={{paddingBottom:"270px"}}>
+		  {ele.tnc}
+		  </div>
+		  </>
+      </Drawer>
+			</>
+		)
+	})
+}
+<div className="d-flex justify-content-end" >
+	{
+		ismore? <span onClick={()=>handleOffers('less')}>- less </span>: <span onClick={()=>handleOffers('more')}>+ more</span>
+	}
+</div>
+
 						</div>
 					</div>
+ </>
 					<div className="container-fluid">
 						<div className="col-1 col-sm-2 col-md-4 col-lg-4 " />
 						<div
@@ -567,7 +632,7 @@ axios(config)
 					</div>
 
 				
-					<div className={`container-fluid p-3 shadow ${styles.description3}`}>
+					{/* <div className={`container-fluid p-3 shadow ${styles.description3}`}>
 						<div className="row">
 							<div className="col">
 								<h6 className={styles.headingMain}>PRODUCT DESCRIPTION</h6>
@@ -593,7 +658,44 @@ axios(config)
 							</span>
 						)}
 					</div>
-				</div>
+				</div> */}
+				{
+                            
+                            productData && productData.resbody.html_body_v2.map((ele)=>{
+                                return(
+                                    <div>
+                                    <div className={`container-fluid p-3 mb-1 shadow ${styles.description2}`}>
+                                    <div className="row">
+                                        <div className="col">
+                                            <h6 className={styles.headingMain}>{ele.title.toUpperCase()}</h6>
+                                        </div>
+                                    </div>
+                                    <Truncate
+                            lines={!rmore && 3}
+                            ellipsis={
+                                <span className={styles.readmore} onClick={handlermore}>
+                                    <strong style={{color: '#DB7093', paddingLeft:"15px"}}>+more</strong>
+                                </span>
+                            }
+                            onTruncate={handlertruncate}
+                        >
+                            <div
+                                dangerouslySetInnerHTML={{ __html: [ ele.msg] }}
+
+                            />
+                        </Truncate>
+                        {!rtruncate &&
+                        rmore && (
+                            <span className={styles.readmore} onClick={handlermore}>
+                                <strong style={{color: '#DB7093', paddingLeft:"15px"}}>-less</strong>
+                            </span>
+                        )} 
+                        </div>
+                                    </div>
+                                )
+                            })
+                            
+                        }
 				{/* {
                         productData && productData.resbody.rating!=null?
                         <div className="container-fluid ">

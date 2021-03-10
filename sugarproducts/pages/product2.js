@@ -21,6 +21,8 @@ import CancelIcon from '@material-ui/icons/Cancel';
 export default function product3({ data }) {
     console.log('product2');
 	const router = useRouter()
+    const [numOffers, setNumOffers] = useState(1)
+	const [ismore, setIsMore] = useState(false)
     const [ expand, setexpand ] = useState(false);
     const [ rmore, setrmore ] = useState(false);
     const [ truncate, settruncate ] = useState(false);
@@ -115,16 +117,18 @@ export default function product3({ data }) {
     const handleCart = (varId,prodId) => {
         console.log(varId,prodId)
         var data = {
+            is_gwp: 0,
           product_id: prodId,
           variant_id: varId,
+          sugar_product_type: 1,
           quantity: 1,
-          customer_id: 2168277991507
+          customer_id: 3449846562899
         };
         var config = {
             method: "post",
             url: "https://qa.api.sugarcosmetics.com/cart/qa/addItemToCartV2",
             headers: {
-              Authorization: "XT4ROmmNaPpgEsmmGzcPfvc69YK3RPSP"
+              Authorization: "aCsf4laORaLOw3J1lBPVUjQn6EqfNcYg"
             },
             data: data,
           };
@@ -239,6 +243,18 @@ axios(config)
         
             }
 
+            const handleOffers = (test) =>{
+                if(test == 'more'){
+                    setNumOffers(offerText.length-1)
+                    setIsMore(!ismore)
+                }
+                else{
+                    setNumOffers(1)
+                    setIsMore(!ismore)
+            
+                }
+            }
+
     var arr=["bestseller", "new", "offer", "trending", "featured", "only few left","sold out", "viewer's choice", "selling like hot cakes"]
 	var imgtags= tags.filter((tag)=>arr.includes(tag.trim().toLowerCase()))
 	imgtags=imgtags.map((ele2)=>ele2.trim())
@@ -252,7 +268,7 @@ axios(config)
                 </Head>
             </div>
             <div style={{ overflowX: 'hidden' }}>
-                <div className="fixed-top" style={{ backgroundColor: 'white', height:"450px"}}>
+                <div className="fixed-top" style={{ backgroundColor: 'white', height:"462px"}}>
                     <div className={`container-fluid mt-3 mb-3 ${styles.sticky}`}>
                     <div className="mb-5">
                     <ProductNavbar title={productData && productData.resbody.title}/>
@@ -332,19 +348,19 @@ axios(config)
                     </div>
                 </div>
                 <div>
-                <div style={{paddingTop:"450px"}}>
+                <div style={{paddingTop:"460px"}}>
                     <div className={`p-3 ${styles.wrapper3}`} style={{backgroundColor:"white"}}>
                         {variant &&
                             variant.map((ele) => {
                                 return (
-                                    <div className="container-fluid mx-2">
+                                    <div className="container-fluid mx-1">
                                         <div className={`row`}>
                                             {variantId===ele.id ? <>
                                             {ele.inventory_quantity !==0 ?  <div style={{height:"55px", width:"55px",borderRadius:"50%",border:"1px solid black"}}>
-												{ele.hexCode==null ? <img src={ele.swatch_url} style={{height: '45px',
-        width: '45px',
+												{ele.hexCode==null ? <img src={ele.swatch_url} style={{height: '40px',
+        width: '40px',
         marginTop:"7px",
-        marginLeft:"-8px",
+        marginLeft:"-5px",
         borderRadius: '50%',
         border:"1px solid white"}} />:
  
@@ -353,20 +369,21 @@ axios(config)
     style={{
         'background-color': `${ele.hexCode}`,
 		// 'background-color': ele.hexCode==null ?  `${ele.swatch_url}`:`${ele.hexCode}`      	
-        height: '45px',
+        height: '40px',
         // width: '55px',
         // marginTop:"7px",
-        marginTop:"5px",
-        marginLeft:"-8px",
+        marginTop:"7px",
+        marginLeft:"-5px",
         borderRadius: '50%',
         border:"1px solid white"
     }}
     onClick={() => titleChange(ele.title, ele.images, ele.offers,ele.id,ele.price,ele.compare_at_price)}
-/>}</div>  : <div style={{height:"55px", width:"55px",borderRadius:"50%",border:"1px solid white"}}>
-{ele.hexCode==null ? <img src={ele.swatch_url} style={{height: '55px',
-        width: '55px',
+/>}</div>  : <div style={{height:"55px", width:"55px",borderRadius:"50%",border:"1px solid black"}}>
+{ele.hexCode==null ? <img src={ele.swatch_url} style={{height: '40px',
+
+        width: '40px',
         marginTop:"7px",
-        marginLeft:"-8px",
+        marginLeft:"-5px",
         borderRadius: '50%',
         border:"1px solid white"}} />:
 
@@ -374,21 +391,22 @@ axios(config)
                                                     className={` ${styles.item3}`}
                                                     style={{
                                                         'background-color': `${ele.hexCode}`,
-                                                        height: '55px',
-                                                        width: '55px',
-                                                        marginTop:"-9px",
-                                                        marginLeft:"-7px",
+                                                        height: '40px',
+                                                        width: '40px',
+                                                        marginTop:"7px",
+                                                        marginLeft:"-5px",
                                                         borderRadius: '50%'
                                                     }}
                                                     onClick={() => titleChange(ele.title, ele.images, ele.offers,ele.id,ele.price,ele.compare_at_price)}
                                                 >
-                                                    <div
+                                                    <div 
                                                         style={{
                                                             border: '1px solid white',
-                                                            width: '99px',
-                                                            marginTop: '15px',
-                                                            marginBottom:"3px",
-                                                            transform: 'rotate(105deg)'
+                                                            width: '75px',
+                                                            // height:"1px",
+                                                            // marginTop: '3px',
+                                                            // marginBottom:"3px",
+                                                            transform: 'rotate(110deg)'
                                                         }}
                                                     />
                                                 </div>}
@@ -396,10 +414,10 @@ axios(config)
                                             </>:<>
                                             {ele.inventory_quantity !== 0 ?
 											<div style={{height:"55px", width:"55px",borderRadius:"50%",border:"1px solid white"}}>
-                                            {ele.hexCode==null ? <img src={ele.swatch_url} style={{height: '45px',
-        width: '45px',
+                                            {ele.hexCode==null ? <img src={ele.swatch_url} style={{height: '40px',
+        width: '40px',
         marginTop:"7px",
-        marginLeft:"-8px",
+        marginLeft:"-5px",
         borderRadius: '50%',
         border:"1px solid white"}}  onClick={() => titleChange(ele.title, ele.images, ele.offers,ele.id,ele.price,ele.compare_at_price)}/>:
 											
@@ -407,8 +425,8 @@ axios(config)
                                             className={` ${styles.item3}`}
                                             style={{
                                                 'background-color': `${ele.hexCode}`,
-                                                height: '45px',
-                                                width: '45px',
+                                                height: '40px',
+                                                width: '40px',
                                                 marginTop:"7px",
         marginLeft:"-5px",
                                                 borderRadius: '50%'
@@ -417,10 +435,10 @@ axios(config)
                                         />}</div>
                                              :        
 											 <>
-											 {ele.hexCode==null ? <img src={ele.swatch_url} style={{height: '55px',
-        width: '55px',
+											 {ele.hexCode==null ? <img src={ele.swatch_url} style={{height: '40px',
+        width: '40px',
         marginTop:"7px",
-        marginLeft:"-8px",
+        marginLeft:"-5px",
         // borderRadius: '50%',
         border:"1px solid white"}}  onClick={() => titleChange(ele.title, ele.images, ele.offers,ele.id,ele.price,ele.compare_at_price)}/>:
 											 <div
@@ -429,8 +447,8 @@ axios(config)
                                                  'background-color': `${ele.hexCode}`,
                                                  height: '40px',
                                                  width: '40px',
-                                                 marginTop:"3px",
-        marginLeft:"-8px",
+                                                 marginTop:"7px",
+        marginLeft:"-5px",
                                                  borderRadius: '50%'
                                              }}
                                              onClick={() => titleChange(ele.title, ele.images, ele.offers,ele.id,ele.price,ele.compare_at_price)}
@@ -438,9 +456,9 @@ axios(config)
                                              <div
                                                  style={{
                                                      border: '1px solid white',
-                                                     width: '45px',
+                                                     width: '38px',
                                                      marginTop: '19px',
-                                                     transform: 'rotate(105deg)'
+                                                     transform: 'rotate(110deg)'
                                                  }}
                                              />
                                          </div>}
@@ -452,7 +470,7 @@ axios(config)
                             })}
                     </div>
  
-                    <div className="container-fluid p-3 shadow" style={{backgroundColor:"white"}}>
+                    {/* <div className="container-fluid p-3 shadow" style={{backgroundColor:"white"}}>
                         <div className="row">
                             <div className="col">
                                 <h6 className={styles.headingMain}>AVAILABLE OFFERS</h6>
@@ -503,7 +521,113 @@ axios(config)
                                 </span>
                             )}
                         </div>
-                    </div>
+                    </div> */}
+ <>
+					<div className="container-fluid p-3 shadow" style={{backgroundColor:"white"}}>
+						<div className="row">
+							<div class="col">
+								<h6 className={styles.headingMain}>AVAILABLE OFFERS</h6>
+							</div>
+						</div>
+						<div>
+							{/* <Truncate
+								lines={!expand && 4}
+								ellipsis={
+									<span className={styles.readmore} onClick={handleToggle}>
+										<strong style={{color: '#DB7093', paddingLeft:"55px"}}>+ more </strong>
+									</span>
+								}
+								onTruncate={handletruncate}
+							>
+								{offerText &&
+									offerText.map((ele) => (
+										<div>
+											<span>&#8211; {ele.productOfferText}</span>
+											<strong style={{textDecoration:"underline",color:"black",cursor:"pointer"}} onClick={openDrawer}> Know More&gt;</strong><br/>
+      
+	  <Drawer
+        duration={250}
+        hideScrollbars={true}
+        onClose={closeDrawer}
+        isVisible={isVisible}
+		style={{opacity:"0.5"}}
+      >
+		  <>
+		  <div className="d-flex justify-content-between">
+		  	<div>
+			  <h4>Terms & Conditions</h4>
+			</div>
+			<div>
+				<CancelIcon style={{height:"35px"}} onClick={closeDrawer}/>
+			</div>
+		  </div>
+		  <div style={{paddingBottom:"270px"}}>
+		  {ele.tnc}
+		  </div>
+		  </>
+      </Drawer>
+										</div>
+									))}
+							</Truncate>
+							{!truncate &&
+							expand && (
+								<span className={styles.readmore} onClick={handleToggle}>
+									<strong style={{color: '#DB7093',paddingLeft:"285px"}}> - less</strong>
+								</span>
+							)} */}
+{
+	offerText &&
+	offerText.map((ele,ind)=>{
+		return(
+			<>
+			{
+ind<=numOffers &&<>
+<div>&#8211; {ele.productOfferText}
+
+<strong style={{textDecoration:"underline",color:"black",cursor:"pointer"}} onClick={openDrawer}> Know More&gt;</strong>
+
+</div>
+</>
+			}
+			{/* <div>&#8211; {ele.productOfferText}
+
+			<strong style={{textDecoration:"underline",color:"black",cursor:"pointer"}} onClick={openDrawer}> Know More&gt;</strong>
+
+			</div> */}
+			<Drawer
+        duration={250}
+        hideScrollbars={true}
+        onClose={closeDrawer}
+        isVisible={isVisible}
+		style={{opacity:"0.5"}}
+      >
+		  <>
+		  <div className="d-flex justify-content-between">
+		  	<div>
+			  <h4>Terms & Conditions</h4>
+			</div>
+			<div>
+				<CancelIcon style={{height:"35px"}} onClick={closeDrawer}/>
+			</div>
+		  </div>
+		  <div style={{paddingBottom:"270px"}}>
+		  {ele.tnc}
+		  </div>
+		  </>
+      </Drawer>
+			</>
+		)
+	})
+}
+<div className="d-flex justify-content-end" >
+	{
+		ismore? <span onClick={()=>handleOffers('less')}>- less </span>: <span onClick={()=>handleOffers('more')}>+ more</span>
+	}
+</div>
+
+						</div>
+					</div>
+ </>
  
                     <div className="container-fluid">
                     <div className="col-1 col-sm-2 col-md-4 col-lg-4 " />
@@ -593,8 +717,8 @@ axios(config)
             <h6 className="mt-3">{deliveryData.message}</h6>
           </div>
  
-                    <div className={`container-fluid p-3 shadow ${styles.description2}`}>
-                        <div className="row">
+                    {/* <div className={`container-fluid p-3 shadow ${styles.description2}`}> */}
+                        {/* <div className="row">
                             <div className="col">
                                 <h6 className={styles.headingMain}>PRODUCT DESCRIPTION</h6>
                             </div>
@@ -609,7 +733,8 @@ axios(config)
                             onTruncate={handlertruncate}
                         >
                             <div
-                                dangerouslySetInnerHTML={{ __html: [ productData && productData.resbody.body_html ] }}
+                                dangerouslySetInnerHTML={{ __html: [ productData && productData.resbody.html_body_v2[0].msg] }}
+
                             />
                         </Truncate>
                         {!rtruncate &&
@@ -617,9 +742,48 @@ axios(config)
                             <span className={styles.readmore} onClick={handlermore}>
                                 <strong style={{color: '#DB7093', paddingLeft:"15px"}}>Show less</strong>
                             </span>
-                        )}
+                        )} */}
+
+                        {
+                            
+                            productData && productData.resbody.html_body_v2.map((ele)=>{
+                                return(
+                                    <div>
+                                    <div className={`container-fluid p-3 mb-1 shadow ${styles.description2}`}>
+                                    <div className="row">
+                                        <div className="col">
+                                            <h6 className={styles.headingMain}>{ele.title.toUpperCase()}</h6>
+                                        </div>
+                                    </div>
+                                    <Truncate
+                            lines={!rmore && 3}
+                            ellipsis={
+                                <span className={styles.readmore} onClick={handlermore}>
+                                    <strong style={{color: '#DB7093', paddingLeft:"15px"}}>+more</strong>
+                                </span>
+                            }
+                            onTruncate={handlertruncate}
+                        >
+                            <div
+                                dangerouslySetInnerHTML={{ __html: [ ele.msg] }}
+
+                            />
+                        </Truncate>
+                        {!rtruncate &&
+                        rmore && (
+                            <span className={styles.readmore} onClick={handlermore}>
+                                <strong style={{color: '#DB7093', paddingLeft:"15px"}}>-less</strong>
+                            </span>
+                        )} 
+                        </div>
+                                    </div>
+                                )
+                            })
+                            
+                        }
+                        
                     </div>
-                </div>
+                {/* </div> */}
                 {/* {
                         productData && productData.resbody.rating!=null?
                         <div className="container-fluid ">

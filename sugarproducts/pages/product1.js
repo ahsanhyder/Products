@@ -20,11 +20,16 @@ import StarRatingComponent from 'react-star-rating-component';
 import Drawer from "react-bottom-drawer"
 import RemoveIcon from '@material-ui/icons/Remove';
 import CancelIcon from '@material-ui/icons/Cancel';
+import { toast, ToastContainer } from 'react-nextjs-toast'
+import { style } from "react-toastify";
 
 
 export default function Product1({ data }) {
 	console.log('product1');
 	const router = useRouter()
+	const [ cartVariants, setcartVariants ] = useState([]);
+	const [numOffers, setNumOffers] = useState(1)
+	const [ismore, setIsMore] = useState(false)
 	const [ expand, setexpand ] = useState(false);
 	const [ rmore, setrmore ] = useState(false);
 	const [ truncate, settruncate ] = useState(false);
@@ -103,21 +108,29 @@ export default function Product1({ data }) {
 	const handleCart = (varId, prodId) => {
 		console.log(varId, prodId);
 		var data = {
+			is_gwp: 0,
 			product_id: prodId,
 			variant_id: varId,
+			sugar_product_type: 0,
 			quantity: 1,
-			customer_id: 2168277991507
+			customer_id: 3449846562899
 		};
 		var config = {
 			method: 'post',
 			url: 'https://qa.api.sugarcosmetics.com/cart/qa/addItemToCartV2',
 			headers: {
-				Authorization: 'XT4ROmmNaPpgEsmmGzcPfvc69YK3RPSP'
+				Authorization: 'aCsf4laORaLOw3J1lBPVUjQn6EqfNcYg'
 			},
 			data: data
 		};
 		axios(config)
 			.then((res) => {
+				toast.notify(`Items added to cart`,{
+					duration: 5,
+					type: "success",
+					
+				  }
+				  )
 				console.log(res.data);
 			})
 			.catch((error) => {
@@ -231,9 +244,22 @@ axios(config)
 	var arr=["bestseller", "new", "offer", "trending", "featured", "only few left","sold out", "viewer's choice", "selling like hot cakes"]
 	var imgtags= tags.filter((tag)=>arr.includes(tag.trim().toLowerCase()))
 	imgtags=imgtags.map((ele2)=>ele2.trim())
+
+	const handleOffers = (test) =>{
+		if(test == 'more'){
+			setNumOffers(offerText.length-1)
+			setIsMore(!ismore)
+		}
+		else{
+			setNumOffers(1)
+			setIsMore(!ismore)
+	
+		}
+	}
 	return (
 		<div style={{backgroundColor:"#E5E5E5"}}>
 			<div style={{ overflowX: 'hidden' }}>
+			<ToastContainer align={"right"} position={"bottom"} />
 				<div>
 				<div className="fixed-top" style={{ backgroundColor: 'white',height:"420px"}}>
 					<div className="container-fluid mt-3 mb-3">
@@ -264,7 +290,7 @@ axios(config)
 									ref={createRef}
 									controls={false}
 									indicators={true}
-									interval={3500}
+									interval={9500}
 									style={{paddingTop:"15px",padding:"15px"}}
 								>
 									{imgData &&
@@ -319,7 +345,7 @@ axios(config)
 							</div>
 						</div>
 						<div>
-							<Truncate
+							{/* <Truncate
 								lines={!expand && 4}
 								ellipsis={
 									<span className={styles.readmore} onClick={handleToggle}>
@@ -339,6 +365,7 @@ axios(config)
         hideScrollbars={true}
         onClose={closeDrawer}
         isVisible={isVisible}
+		style={{opacity:"0.5"}}
       >
 		  <>
 		  <div className="d-flex justify-content-between">
@@ -349,7 +376,7 @@ axios(config)
 				<CancelIcon style={{height:"35px"}} onClick={closeDrawer}/>
 			</div>
 		  </div>
-		  <div style={{paddingBottom:"250px"}}>
+		  <div style={{paddingBottom:"270px"}}>
 		  {ele.tnc}
 		  </div>
 		  </>
@@ -362,7 +389,57 @@ axios(config)
 								<span className={styles.readmore} onClick={handleToggle}>
 									<strong style={{color: '#DB7093',paddingLeft:"285px"}}> - less</strong>
 								</span>
-							)}
+							)} */}
+{
+	offerText &&
+	offerText.map((ele,ind)=>{
+		return(
+			<>
+			{
+ind<=numOffers &&<>
+<div>&#8211; {ele.productOfferText}
+
+<strong style={{textDecoration:"underline",color:"black",cursor:"pointer"}} onClick={openDrawer}> Know More&gt;</strong>
+
+</div>
+</>
+			}
+			{/* <div>&#8211; {ele.productOfferText}
+
+			<strong style={{textDecoration:"underline",color:"black",cursor:"pointer"}} onClick={openDrawer}> Know More&gt;</strong>
+
+			</div> */}
+			<Drawer
+        duration={250}
+        hideScrollbars={true}
+        onClose={closeDrawer}
+        isVisible={isVisible}
+		style={{opacity:"0.5"}}
+      >
+		  <>
+		  <div className="d-flex justify-content-between">
+		  	<div>
+			  <h4>Terms & Conditions</h4>
+			</div>
+			<div>
+				<CancelIcon style={{height:"35px"}} onClick={closeDrawer}/>
+			</div>
+		  </div>
+		  <div style={{paddingBottom:"270px"}}>
+		  {ele.tnc}
+		  </div>
+		  </>
+      </Drawer>
+			</>
+		)
+	})
+}
+<div className="d-flex justify-content-end" >
+	{
+		ismore? <span onClick={()=>handleOffers('less')}>- less </span>: <span onClick={()=>handleOffers('more')}>+ more</span>
+	}
+</div>
+
 						</div>
 					</div>
 
@@ -376,6 +453,7 @@ axios(config)
 								productData && productData.resbody.variants[0].isWishlisted==false?
 								
 									<div className={styles.likeIcon}>
+										
 										<FavoriteBorderRoundedIcon style={{ fontSize: 45 }} onClick={()=>handleAddWishlist(
 									productData && productData.resbody.variants[0].id,
 										productData && productData.resbody.id)} />
@@ -387,6 +465,7 @@ axios(config)
 										productData && productData.resbody.variants[0].id,
 									productData && productData.resbody.id)} />
 								</div>
+								
 							
 							}
 
@@ -450,7 +529,7 @@ axios(config)
 						<h6 className="mt-3">{deliveryData.message}</h6>
 					</div>
 
-					
+{/* 					
 					<div className={`container-fluid p-3 ${styles.description1}`}>
 						<div className="row">
 							<div className="col">
@@ -476,7 +555,44 @@ axios(config)
 								<strong style={{color: '#DB7093', paddingLeft:"15px"}}>Show less</strong>
 							</span>
 						)}
-					</div>
+					</div> */}
+					{
+                            
+                            productData && productData.resbody.html_body_v2.map((ele)=>{
+                                return(
+                                    <div>
+                                    <div className={`container-fluid p-3 mb-1 shadow ${styles.description2}`}>
+                                    <div className="row">
+                                        <div className="col">
+                                            <h6 className={styles.headingMain}>{ele.title.toUpperCase()}</h6>
+                                        </div>
+                                    </div>
+                                    <Truncate
+                            lines={!rmore && 3}
+                            ellipsis={
+                                <span className={styles.readmore} onClick={handlermore}>
+                                    <strong style={{color: '#DB7093', paddingLeft:"15px"}}>+more</strong>
+                                </span>
+                            }
+                            onTruncate={handlertruncate}
+                        >
+                            <div
+                                dangerouslySetInnerHTML={{ __html: [ ele.msg] }}
+
+                            />
+                        </Truncate>
+                        {!rtruncate &&
+                        rmore && (
+                            <span className={styles.readmore} onClick={handlermore}>
+                                <strong style={{color: '#DB7093', paddingLeft:"15px"}}>-less</strong>
+                            </span>
+                        )} 
+                        </div>
+                                    </div>
+                                )
+                            })
+                            
+                        }
 					{/* {
                         productData && productData.resbody.rating!=null?
                         <div className="container-fluid ">
@@ -582,6 +698,7 @@ axios(config)
 				<div style={{display:"flex",justifyContent:"center",alignItems:"center",marginBottom: '110px'}}>
 					<small className="mt-2" style={{fontWeight:"bold", color:'#DB7093'}}>~Rule the world, one look at a time~</small>
 				</div>
+				<ToastContainer options={{zIndex: 200, top: '50px'}} />
 			</div>
 		</div>
 	);
