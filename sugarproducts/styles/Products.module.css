@@ -106,8 +106,8 @@
     max-height: 120px;
     display: flex;
     overflow-x: auto;
-    margin-top: 8px;
-    margin-bottom: 8px;
+    margin-top: 6px;
+    margin-bottom: 6px;
     /* margin-left: 10px; */
   }
 
@@ -235,8 +235,8 @@ margin:5px;
 }
 .cartDiv{
     display: flex;
-    position: fixed;
-    margin-bottom: 6px ;
+    /* position: fixed; */
+    margin-bottom: 16px ;
 
 }
 

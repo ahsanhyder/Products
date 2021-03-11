@@ -16,11 +16,14 @@ import StarRatingComponent from 'react-star-rating-component';
 import Drawer from "react-bottom-drawer"
 import RemoveIcon from '@material-ui/icons/Remove';
 import CancelIcon from '@material-ui/icons/Cancel';
+import TruncComponent from './truncate'
 
 
 export default function Product3({ data }) {
 	console.log('product2');
 	const router = useRouter()
+	const [notification, setNotification] = useState(false)
+
 	const [numOffers, setNumOffers] = useState(1)
 	const [ismore, setIsMore] = useState(false)
 	const [ cartVariants, setcartVariants ] = useState([]);
@@ -138,6 +141,13 @@ export default function Product3({ data }) {
 			};
 			axios(config)
 				.then((res) => {
+					if(res.data.statusId == 1) {
+						setNotification(true)
+						setTimeout(()=>{
+							setNotification(false)
+						},3000)
+		
+					}
 					console.log(res.data);
 				})
 				.catch((error) => {
@@ -285,14 +295,8 @@ axios(config)
 	}
 	return (
 		<div  style={{backgroundColor:"#E5E5E5"}}>
-			{/* <div>
-				<Head>
-					<title>Create Next App</title>
-					<link rel="icon" href="/favicon.ico" />
-				</Head>
-			</div> */}
 			<div style={{ overflowX: 'hidden' }}>
-				<div className="fixed-top" style={{ backgroundColor: 'white', height:"428px" }}>
+				<div className="fixed-top" style={{ backgroundColor: 'white', height:"365px" }}>
 					<div className={`container-fluid mt-3 mb-3 ${styles.sticky}`}>
 					<div className="mb-5">
                     <ProductNavbar title={productData && productData.resbody.title}/>
@@ -334,7 +338,7 @@ axios(config)
 						</div>
 					</div>
 
-					<div className="container-fluid">
+					{/* <div className="container-fluid">
 						<div className="row">
 							<div className="col text-center" style={{marginTop:"-15px"}}>
 								<p className={styles.productTitle}>{productData && productData.resbody.title}</p>
@@ -357,9 +361,33 @@ axios(config)
 								)}
 							</div>
 						</div>
-					</div>
+					</div> */}
 				</div>
-				<div style={{paddingTop:"427px"}}>
+				<div style={{paddingTop:"384px"}}>
+				<div className="container-fluid">
+						<div className="row">
+							<div className="col text-center" style={{marginTop:"-15px",paddingTop:"20px",paddingBottom:"70px",backgroundColor:"white"}}>
+								<p className={styles.productTitle}>{productData && productData.resbody.title}</p>
+							</div>
+						</div>
+						<div className="row" style={{marginTop:"-47px"}}>
+							<div className="col-4" style={{marginTop:"10px"}}>
+								<h5 className={`text-danger ${styles.linecut}`}>
+									{compare_at_price && `Rs. ${compare_at_price}`}
+								</h5>
+							</div>
+							<div className="col-4 text-center">
+								<p className={styles.productTitle2}>Rs. {price}</p>
+							</div>
+							<div className="col-4">
+								{compare_at_price && (
+									<h5 className="text-danger">
+										({Math.floor((compare_at_price - price) / compare_at_price * 100)} % Off)
+									</h5>
+								)}
+							</div>
+						</div>
+					</div>
 					<div className="container-fluid mt-2 mb-1 p-3 shadow" style={{backgroundColor:"white"}}>
 						{products &&
 							products.map((ele) => {
@@ -376,8 +404,6 @@ axios(config)
 													<div
 														className={`col-8  text-center border d-flex justify-content-center align-items-center ${styles.divp21} `}
 													>
-														{/* {ele1.title} */}
-														{/* {console.log(ele1.title)} */}
 														{cartVariants.length > 0 ? cartVariants.filter(
 															(item) => item.product_title == ele.title && item
 														).length > 0 ? (
@@ -445,51 +471,6 @@ axios(config)
 							</div>
 						</div>
 						<div>
-							{/* <Truncate
-								lines={!expand && 4}
-								ellipsis={
-									<span className={styles.readmore} onClick={handleToggle}>
-										<strong style={{color: '#DB7093', paddingLeft:"55px"}}>+ more </strong>
-									</span>
-								}
-								onTruncate={handletruncate}
-							>
-								{offerText &&
-									offerText.map((ele) => (
-										<div>
-											<span>&#8211; {ele.productOfferText}</span>
-											<strong style={{textDecoration:"underline",color:"black",cursor:"pointer"}} onClick={openDrawer}> Know More&gt;</strong><br/>
-      
-	  <Drawer
-        duration={250}
-        hideScrollbars={true}
-        onClose={closeDrawer}
-        isVisible={isVisible}
-		style={{opacity:"0.5"}}
-      >
-		  <>
-		  <div className="d-flex justify-content-between">
-		  	<div>
-			  <h4>Terms & Conditions</h4>
-			</div>
-			<div>
-				<CancelIcon style={{height:"35px"}} onClick={closeDrawer}/>
-			</div>
-		  </div>
-		  <div style={{paddingBottom:"270px"}}>
-		  {ele.tnc}
-		  </div>
-		  </>
-      </Drawer>
-										</div>
-									))}
-							</Truncate>
-							{!truncate &&
-							expand && (
-								<span className={styles.readmore} onClick={handleToggle}>
-									<strong style={{color: '#DB7093',paddingLeft:"285px"}}> - less</strong>
-								</span>
-							)} */}
 {
 	offerText &&
 	offerText.map((ele,ind)=>{
@@ -504,11 +485,6 @@ ind<=numOffers &&<>
 </div>
 </>
 			}
-			{/* <div>&#8211; {ele.productOfferText}
-
-			<strong style={{textDecoration:"underline",color:"black",cursor:"pointer"}} onClick={openDrawer}> Know More&gt;</strong>
-
-			</div> */}
 			<Drawer
         duration={250}
         hideScrollbars={true}
@@ -543,14 +519,11 @@ ind<=numOffers &&<>
 						</div>
 					</div>
  </>
-					<div className="container-fluid">
+					{/* <div className="container-fluid">
 						<div className="col-1 col-sm-2 col-md-4 col-lg-4 " />
 						<div
 							className={`container-fluid col-10 col-sm-8 col-md-4 col-lg-4 fixed-bottom ${styles.cartDiv}`}
 						>
-							{/* <div className={styles.likeIcon}>
-								<FavoriteBorderRoundedIcon style={{ fontSize: 45 }} onClick={()=>handleAddWishlist(variantId, productData && productData.resbody.id)}/>
-							</div> */}
 							{
 								productData && productData.resbody.variants[0].isWishlisted==false?
 								
@@ -590,11 +563,77 @@ ind<=numOffers &&<>
 								ADD TO CART
 							</div>
 							}
-							{/* <div className={styles.cartButton} onClick={handleCart}>
-								ADD TO CART
-							</div> */}
 						</div>
 						<div className="col-1 col-sm-2 col-md-4 col-lg-4 " />
+					</div> */}
+
+<div className={`fixed-bottom d-flex`}>
+						<div className="col-2"></div>
+						
+<div >
+{
+								productData && productData.resbody.variants[0].isWishlisted==false?
+								
+									<div className={styles.likeIcon}>
+										
+										<FavoriteBorderRoundedIcon style={{ fontSize: 45 }} onClick={()=>handleAddWishlist(
+									productData && productData.resbody.variants[0].id,
+										productData && productData.resbody.id)} />
+									</div>
+								:
+								
+								<div className={styles.likeIcon}>
+									<FavoriteRoundedIcon style={{ fontSize: 45 }} onClick={()=>handleRemoveWishlist(
+										productData && productData.resbody.variants[0].id,
+									productData && productData.resbody.id)} />
+								</div>
+								
+							
+							}
+</div>
+<div>
+{
+								productData && productData.resbody.variants[0].inventory_quantity==0?<div
+								className={styles.cartButton2}
+								onClick={() =>
+									handleNotify(
+										productData && productData.resbody.variants[0].id,
+										productData && productData.resbody.id
+									)}
+							>
+								NOTIFY ME
+							</div>:
+							<>
+							<div
+								className={styles.cartButton}
+								onClick={handleCart}
+								onClick={() =>
+									handleCart(
+										productData && productData.resbody.variants[0].id,
+										productData && productData.resbody.id
+									)}
+							>
+								ADD TO CART
+								
+							</div>
+							
+							
+							
+							
+							
+							</>
+							}
+						<div className={`${notification ? 'd-block' : 'd-none'}`}>
+							<div className="d-flex justify-content-between" style={{backgroundColor:"black",color:"white",padding:"10px",paddingRight:"10px",paddingLeft:"40px",marginLeft:"-85px",marginTop:"10px"}}>
+								<div className="flex-grow-1">
+									Items added to Cart
+								</div>
+								<div>
+									viewCart
+								</div>
+							</div>
+							</div>
+						</div>
 					</div>
 
 					<div className="container-fluid mt-1 mb-1 p-3 shadow" style={{backgroundColor:"white"}}>
@@ -630,116 +669,16 @@ ind<=numOffers &&<>
 							<h5 className="mt-3">{deliveryData.message}</h5>
 						</div>
 					</div>
-
-				
-					{/* <div className={`container-fluid p-3 shadow ${styles.description3}`}>
-						<div className="row">
-							<div className="col">
-								<h6 className={styles.headingMain}>PRODUCT DESCRIPTION</h6>
-							</div>
-						</div>
-						<Truncate
-							lines={!rmore && 5}
-							ellipsis={
-								<span className={styles.readmore} onClick={handlermore}>
-									<strong  style={{color: '#DB7093', paddingLeft:"15px"}}>...Read more</strong>
-								</span>
-							}
-							onTruncate={handlertruncate}
-						>
-							<div
-								dangerouslySetInnerHTML={{ __html: [ productData && productData.resbody.body_html ] }}
-							/>
-						</Truncate>
-						{!rtruncate &&
-						rmore && (
-							<span className={styles.readmore} onClick={handlermore}>
-								<strong style={{color: '#DB7093', paddingLeft:"15px"}}>Show less</strong>
-							</span>
-						)}
-					</div>
-				</div> */}
 				{
                             
                             productData && productData.resbody.html_body_v2.map((ele)=>{
-                                return(
-                                    <div>
-                                    <div className={`container-fluid p-3 mb-1 shadow ${styles.description2}`}>
-                                    <div className="row">
-                                        <div className="col">
-                                            <h6 className={styles.headingMain}>{ele.title.toUpperCase()}</h6>
-                                        </div>
-                                    </div>
-                                    <Truncate
-                            lines={!rmore && 3}
-                            ellipsis={
-                                <span className={styles.readmore} onClick={handlermore}>
-                                    <strong style={{color: '#DB7093', paddingLeft:"15px"}}>+more</strong>
-                                </span>
-                            }
-                            onTruncate={handlertruncate}
-                        >
-                            <div
-                                dangerouslySetInnerHTML={{ __html: [ ele.msg] }}
+                                return( 
+						<TruncComponent data={ele} />
 
-                            />
-                        </Truncate>
-                        {!rtruncate &&
-                        rmore && (
-                            <span className={styles.readmore} onClick={handlermore}>
-                                <strong style={{color: '#DB7093', paddingLeft:"15px"}}>-less</strong>
-                            </span>
-                        )} 
-                        </div>
-                                    </div>
                                 )
                             })
                             
                         }
-				{/* {
-                        productData && productData.resbody.rating!=null?
-                        <div className="container-fluid ">
-						<div className="d-flex justify-content-between mb-2">
-							<div>
-								<h6 style={{fontWeight:"bold"}}>RATINGS AND REVIEWS</h6>
-							</div>
-							<div>
-								<AddCircleOutlineIcon style={{height:"32px",marginTop:"-5px",color: '#DB7093'}}/>
-							</div>
-						</div>
-							{
-								productData && productData.resbody.rating.reviews.map((elem1)=>{
-									{var date = new Date(elem1.createdAt).toString().substring(0,15)}
-									return(
-										<div className="card shadow-sm">
-
-										<div className="d-flex justify-content-around mx-1 my-3">
-												<div style={{height:"60px",width:"60px",border:"1px solid black",borderRadius:"50%",display:"flex",justifyContent:"center",alignItems:"center",backgroundColor:"orange",fontWeight:"bolder",color:"white",fontSize:"20px"}}>
-												{elem1.first_name.substring(0,1)} {elem1.last_name.substring(0,1)}
-												</div>
-				
-												<div>
-													<p className="card-text mx-1"><small class="text-success">{elem1.first_name} {elem1.last_name}</small></p>
-													<div>
-														<StarRatingComponent
-															name="rate1"
-															editing={false}
-															renderStarIcon={() => <span><img src="/star_filled.png" style={{height:"30px"}}/></span>}
-															starCount={5}
-															value={elem1.rating}
-															starColor={"orange"}
-														/>
-													</div>												</div>
-												<div>
-													<p class="card-text"><small class="text-muted">{date}</small></p>
-												</div>  
-											</div>
-										</div>
-									)
-								})
-							}
-					</div>:<div></div>
-                    } */}
 				{productData &&
 				productData.resbody.youtube_id && (
 					<div className="p-2  mt-1 shadow" style={{backgroundColor:"white"}}>

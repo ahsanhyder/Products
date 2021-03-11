@@ -16,11 +16,15 @@ import StarRatingComponent from 'react-star-rating-component';
 import Drawer from "react-bottom-drawer"
 import RemoveIcon from '@material-ui/icons/Remove';
 import CancelIcon from '@material-ui/icons/Cancel';
+import TruncComponent from './truncate'
+
 
 
 export default function Product4({ data }) {
     console.log('product4');
     const router = useRouter()
+    const [notification, setNotification] = useState(false)
+
     const [numOffers, setNumOffers] = useState(1)
 	const [ismore, setIsMore] = useState(false)
     const [ expand, setexpand ] = useState(false);
@@ -117,6 +121,13 @@ export default function Product4({ data }) {
           };
           axios(config)
             .then((res) => {
+                if(res.data.statusId == 1) {
+					setNotification(true)
+					setTimeout(()=>{
+						setNotification(false)
+					},3000)
+	
+				}
               console.log(res.data);
             })
             .catch((error) => {
@@ -236,7 +247,7 @@ axios(config)
         <div style={{backgroundColor:"#E5E5E5"}}>
         
             <div style={{ overflowX: 'hidden' }}>
-                <div className="fixed-top mt-5" style={{ backgroundColor: 'white', height:"320px" }}>
+                <div className="fixed-top mt-5" style={{ backgroundColor: 'white', height:"250px" }}>
                     <div className={`container-fluid mb-5`}>
                     <ProductNavbar title={productData && productData.resbody.title}/>
                     </div>
@@ -266,16 +277,10 @@ axios(config)
                                             </Carousel.Item>
                                         ))}
                                 </Carousel>
-                                {/* {
-                                   productData && productData.resbody.rating!=null? <div className="fixedBottom d-flex align-items-center shadow-sm" style={{height:"40px",width:"auto",borderRadius:"20px 20px 20px 20px",marginTop:"-85px",marginLeft:"-35px",zIndex:"2",backgroundColor:"white",position:"absolute"}}>
-                                   <span><img src="../star_filled.png" alt="Rating star" style={{height:"25px",marginRight:"15px",marginLeft:"15px"}}/></span>
-                                   <span><small className="text-muted" style={{fontSize:"15px",marginRight:"15px"}}>{`${(productData && productData.resbody.rating.average).toFixed(1)}`} ({productData && productData.resbody.rating.count})</small></span>
-                               </div>:<div></div>
-                                } */}
                                 
                                 </div>  
                             <div className="col-2 col-sm-2 col-md-4" ></div>
-                            <div className="container-fluid">
+                            {/* <div className="container-fluid">
                         <div className="row">
                             <div className="col text-center">
                                 <p className={styles.productTitle} style={{marginTop:"12px"}}>{productData && productData.resbody.title}</p>
@@ -298,17 +303,41 @@ axios(config)
                                 )}
                             </div>
                         </div>
-                    </div> 
+                    </div>  */}
                         </div>
                     </div>
-                    <div style={{paddingTop:"371px"}}>
-                    <div className={`p-3 m-0 mt-1  ${styles.wrapper}`} style={{backgroundColor:"white"}}>
+                    <div style={{paddingTop:"318px"}}>
+                    <div className="container-fluid mb-1">
+                        <div className="row">
+                            <div className="col text-center"  style={{marginTop:"-15px",paddingTop:"20px",paddingBottom:"30px",backgroundColor:"white"}}>
+                                <p className={styles.productTitle} style={{marginTop:"12px"}}>{productData && productData.resbody.title}</p>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col text-center" style={{marginTop:"-30px"}}>
+                                <h5 className={`text-danger ${styles.linecut}`}>
+                                    {compare_at_price && `Rs. ${compare_at_price}`}
+                                </h5>
+                            </div>
+                            <div className="col text-center" style={{marginTop:"-30px"}}>
+                                <p className={styles.productTitle} style={{marginTop:"-10px"}}>Rs. {price}</p>
+                            </div>
+                            <div className="col" style={{marginTop:"-30px"}}>
+                                {compare_at_price && (
+                                    <h5 className="text-danger">
+                                        ({Math.floor((compare_at_price - price) / compare_at_price * 100)} % Off)
+                                    </h5>
+                                )}
+                            </div>
+                        </div>
+                    </div> 
+                    <div className={`p-3 m-0   ${styles.wrapper}`} style={{backgroundColor:"white"}}>
                         {selectPrice && selectPrice.map((ele,index) => {
                             return (
                                 <div className="container-fluid">
                                     <div className={`row`}>
                                         <>
-                                        {variantId===ele.id?(<div className="" style={{height:"65px",width:"90px", border:"1px solid black"}}>
+                                        {variantId===ele.id?(<div className="" style={{height:"65px",width:"85px", border:"1px solid black"}}>
                                         <div
                                             className={`col p-2  my-2  ${styles.item}`}
                                             style={{ width: '20px', height: '45px',display:"flex",justifyContent:"center",alignItems:"center" }}
@@ -328,51 +357,11 @@ axios(config)
                                         </div>
                                         </div>)}
                                         </>
-                                        {/* <div style={{height:"48px",width:"90px", border:"1px solid black"}}> */}
-                                        {/* <div
-                                            className={`col m-2  ${styles.item}`}
-                                            style={{ width: '20px', height: '40px', border: '1px solid black',display:"flex",justifyContent:"center",alignItems:"center" }}
-                                            onClick={() => titleChange(ele.images, ele.price)}
-                                        >
-                                            {ele.title}
-                                        </div> */}
                                         </div>
                                     </div>
                             );
                         })}
                     </div>
-                    
-                    {/* <div className="container-fluid">
-                        <div className="row">
-                            <div className="col text-center">
-                                <p className={styles.productTitle} style={{marginTop:"-12px"}}>{productData && productData.resbody.title}</p>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col text-center">
-                                <h5 className={`text-danger ${styles.linecut}`}>
-                                    {compare_at_price && `Rs. ${compare_at_price}`}
-                                </h5>
-                            </div>
-                            <div className="col text-center">
-                                <p className={styles.productTitle} style={{marginTop:"-10px"}}>Rs. {price}</p>
-                            </div>
-                            <div className="col">
-                                {compare_at_price && (
-                                    <h5 className="text-danger">
-                                        ({Math.floor((compare_at_price - price) / compare_at_price * 100)} % Off)
-                                    </h5>
-                                )}
-                            </div>
-                        </div>
-                    </div> */}
-
-
-
-
-
-
-
                 </div>
                 <div className="shadow mt-1 mb-1">
                     <div className="container-fluid  p-3" style={{backgroundColor:"white"}}>
@@ -405,51 +394,6 @@ axios(config)
 							</div>
 						</div>
 						<div>
-							{/* <Truncate
-								lines={!expand && 4}
-								ellipsis={
-									<span className={styles.readmore} onClick={handleToggle}>
-										<strong style={{color: '#DB7093', paddingLeft:"55px"}}>+ more </strong>
-									</span>
-								}
-								onTruncate={handletruncate}
-							>
-								{offerText &&
-									offerText.map((ele) => (
-										<div>
-											<span>&#8211; {ele.productOfferText}</span>
-											<strong style={{textDecoration:"underline",color:"black",cursor:"pointer"}} onClick={openDrawer}> Know More&gt;</strong><br/>
-      
-	  <Drawer
-        duration={250}
-        hideScrollbars={true}
-        onClose={closeDrawer}
-        isVisible={isVisible}
-		style={{opacity:"0.5"}}
-      >
-		  <>
-		  <div className="d-flex justify-content-between">
-		  	<div>
-			  <h4>Terms & Conditions</h4>
-			</div>
-			<div>
-				<CancelIcon style={{height:"35px"}} onClick={closeDrawer}/>
-			</div>
-		  </div>
-		  <div style={{paddingBottom:"270px"}}>
-		  {ele.tnc}
-		  </div>
-		  </>
-      </Drawer>
-										</div>
-									))}
-							</Truncate>
-							{!truncate &&
-							expand && (
-								<span className={styles.readmore} onClick={handleToggle}>
-									<strong style={{color: '#DB7093',paddingLeft:"285px"}}> - less</strong>
-								</span>
-							)} */}
 {
 	offerText &&
 	offerText.map((ele,ind)=>{
@@ -464,11 +408,7 @@ ind<=numOffers &&<>
 </div>
 </>
 			}
-			{/* <div>&#8211; {ele.productOfferText}
-
-			<strong style={{textDecoration:"underline",color:"black",cursor:"pointer"}} onClick={openDrawer}> Know More&gt;</strong>
-
-			</div> */}
+			
 			<Drawer
         duration={250}
         hideScrollbars={true}
@@ -547,14 +487,12 @@ ind<=numOffers &&<>
 							}
 					</div>:<div></div>
                     }
-                    <div className="container-fluid">
+                    {/* <div className="container-fluid">
                         <div className="col-1 col-sm-2 col-md-4 col-lg-4 " />
                         <div
                             className={`container-fluid col-10 col-sm-8 col-md-4 col-lg-4 fixed-bottom ${styles.cartDiv}`}
                         >
-                            {/* <div className={styles.likeIcon}>
-                                <FavoriteBorderRoundedIcon style={{ fontSize: 45 }} onClick={()=>handleAddWishlist(variantId, productData && productData.resbody.id)}/>
-                            </div> */}
+                           
                             {
 								productData && productData.resbody.variants[0].isWishlisted==false?
 								
@@ -596,12 +534,78 @@ ind<=numOffers &&<>
 								ADD TO CART
 							</div>
 							}
-                            {/* <div className={styles.cartButton} onClick={()=>handleCart(variantId, productData && productData.resbody.id)}>
-                                ADD TO CART
-                            </div> */}
+                           
                         </div>
                         <div className="col-1 col-sm-2 col-md-4 col-lg-4 " />
-                    </div>
+                    </div> */}
+                    <div className={`fixed-bottom d-flex`}>
+						<div className="col-2"></div>
+						
+<div >
+{
+								productData && productData.resbody.variants[0].isWishlisted==false?
+								
+									<div className={styles.likeIcon}>
+										
+										<FavoriteBorderRoundedIcon style={{ fontSize: 45 }} onClick={()=>handleAddWishlist(
+									productData && productData.resbody.variants[0].id,
+										productData && productData.resbody.id)} />
+									</div>
+								:
+								
+								<div className={styles.likeIcon}>
+									<FavoriteRoundedIcon style={{ fontSize: 45 }} onClick={()=>handleRemoveWishlist(
+										productData && productData.resbody.variants[0].id,
+									productData && productData.resbody.id)} />
+								</div>
+								
+							
+							}
+</div>
+<div>
+{
+								productData && productData.resbody.variants[0].inventory_quantity==0?<div
+								className={styles.cartButton2}
+								onClick={() =>
+									handleNotify(
+										productData && productData.resbody.variants[0].id,
+										productData && productData.resbody.id
+									)}
+							>
+								NOTIFY ME
+							</div>:
+							<>
+							<div
+								className={styles.cartButton}
+								onClick={handleCart}
+								onClick={() =>
+									handleCart(
+										productData && productData.resbody.variants[0].id,
+										productData && productData.resbody.id
+									)}
+							>
+								ADD TO CART
+								
+							</div>
+							
+							
+							
+							
+							
+							</>
+							}
+						<div className={`${notification ? 'd-block' : 'd-none'}`}>
+							<div className="d-flex justify-content-between" style={{backgroundColor:"black",color:"white",padding:"10px",paddingRight:"10px",paddingLeft:"40px",marginLeft:"-85px",marginTop:"10px"}}>
+								<div className="flex-grow-1">
+									Items added to Cart
+								</div>
+								<div>
+									viewCart
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
                     <div className="container-fluid mt-1 mb-1 p-3 shadow" style={{backgroundColor:"white"}}>
                         <div className="my-2">
                             <span className="px-1" style={{ fontWeight: 'bold' }}>
@@ -636,65 +640,14 @@ ind<=numOffers &&<>
                         </div>
                         <h6 className="mt-3">{deliveryData.message}</h6>
                     </div>
-                   
-                    {/* <div className={`container-fluid p-3 shadow ${styles.description4}`}>
-                        <div className="row">
-                            <div className="col">
-                                <h6 className={styles.headingMain}>PRODUCT DESCRIPTION</h6>
-                            </div>
-                        </div>
-                        <Truncate
-                            lines={!rmore && 5}
-                            ellipsis={
-                                <span className={styles.readmore} onClick={handlermore}>
-                                    <strong  style={{color: '#DB7093', paddingLeft:"15px"}}>...Read more</strong>
-                                </span>
-                            }
-                            onTruncate={handlertruncate}
-                        >
-                            <div dangerouslySetInnerHTML={{ __html: [productData && productData.resbody.body_html ] }} />
-                        </Truncate>
-                        {!rtruncate &&
-                        rmore && (
-                            <span className={styles.readmore} onClick={handlermore}>
-                                <strong style={{color: '#DB7093', paddingLeft:"15px"}}>Show less</strong>
-                            </span>
-                        )}
-                    </div> */}
 
 {
                             
                             productData && productData.resbody.html_body_v2.map((ele)=>{
                                 return(
-                                    <div>
-                                    <div className={`container-fluid p-3 mb-1 shadow ${styles.description2}`}>
-                                    <div className="row">
-                                        <div className="col">
-                                            <h6 className={styles.headingMain}>{ele.title.toUpperCase()}</h6>
-                                        </div>
-                                    </div>
-                                    <Truncate
-                            lines={!rmore && 3}
-                            ellipsis={
-                                <span className={styles.readmore} onClick={handlermore}>
-                                    <strong style={{color: '#DB7093', paddingLeft:"15px"}}>+more</strong>
-                                </span>
-                            }
-                            onTruncate={handlertruncate}
-                        >
-                            <div
-                                dangerouslySetInnerHTML={{ __html: [ ele.msg] }}
+                       
+                        <TruncComponent data={ele} />
 
-                            />
-                        </Truncate>
-                        {!rtruncate &&
-                        rmore && (
-                            <span className={styles.readmore} onClick={handlermore}>
-                                <strong style={{color: '#DB7093', paddingLeft:"15px"}}>-less</strong>
-                            </span>
-                        )} 
-                        </div>
-                                    </div>
                                 )
                             })
                             
